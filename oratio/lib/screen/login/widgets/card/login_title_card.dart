@@ -9,7 +9,7 @@ class LoginTitleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       alignment: Alignment.centerLeft,
       child: const Text(
         'Login',

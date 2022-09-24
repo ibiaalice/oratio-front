@@ -18,7 +18,9 @@ class LoginImageCard extends StatelessWidget {
             height: screenSize.height * 0.21,
             color: OratioColors.primary,
           ),
-          Image.asset('assets/images/student.png'),
+          Image.asset(
+            'assets/images/student.png',
+          ),
         ],
       ),
     );

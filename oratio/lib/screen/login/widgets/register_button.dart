@@ -8,7 +8,7 @@ class RegisterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 40),
+      padding: const EdgeInsets.symmetric(vertical: 30),
       child: TextButton(
         onPressed: () => onPressed(),
         child: const Text(

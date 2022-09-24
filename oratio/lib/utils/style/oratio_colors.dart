@@ -5,6 +5,7 @@ class OratioColors {
 
   static const Color primary = Color(0xffF4EBE5);
   static const Color secondary = Color(0xffA3A3A3);
+  static const Color accent = Color(0xffEECCAF);
   static const Color disabledGrey = Color(0xffC8D5E7);
   static const Color background = Color(0xffEEEDEB);
   static const Color text = black;
