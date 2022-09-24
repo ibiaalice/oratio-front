@@ -3,19 +3,25 @@
     // Focalizar para exibir as descrições dos atributos existentes.
     // Para obter mais informações, acesse: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
+    "file.exclude":{
+        "**/.g.dart": true,
+        "./android/": true,
+    },
     "configurations": [
         {
-            "name": "Flutter: Attach to Device",
-            "type": "dart",
-"request": "attach"
-        },
-        {
-            "name": "Attach to Chrome",
-            "port": 9222,
-            "request": "attach",
+            "name": "Launch Chrome",
+            "request": "launch",
             "type": "chrome",
+            "url": "http://10.0.2.2:8080",
             "webRoot": "${workspaceFolder}"
         },
+        {
+            "name": "web",
+            "program": "lib/main.dart",
+            "request": "launch",
+            "type": "dart",
+            "args": ["--web-port", "8080"]
+          },
         {
             "name": "oratio",
             "request": "launch",
@@ -32,6 +38,7 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
-        }
+        },
+
     ]
 }
