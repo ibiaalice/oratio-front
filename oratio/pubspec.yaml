@@ -11,7 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  animated_text_kit: ^4.2.1
   cupertino_icons: ^1.0.2
+
 
 dev_dependencies:
   flutter_test:
@@ -21,5 +23,15 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/
+  fonts:
+    - family: Play
+      fonts:
+        - asset: assets/font/play_font.ttf
+
+    - family: Oratio
+      fonts:
+        - asset: assets/icons/oratio_icons.ttf
 
 
