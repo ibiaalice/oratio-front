@@ -1,5 +1,5 @@
 import 'package:mobx/mobx.dart';
-import 'package:oratio/config/core/account_type.dart';
+import 'package:oratio/config/core/enums/account_type.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 part 'login_store.g.dart';
 

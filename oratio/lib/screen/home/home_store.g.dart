@@ -57,6 +57,22 @@ mixin _$HomeStore on _HomeStoreBase, Store {
     });
   }
 
+  late final _$homeOptionsAtom =
+      Atom(name: '_HomeStoreBase.homeOptions', context: context);
+
+  @override
+  HomeOptions get homeOptions {
+    _$homeOptionsAtom.reportRead();
+    return super.homeOptions;
+  }
+
+  @override
+  set homeOptions(HomeOptions value) {
+    _$homeOptionsAtom.reportWrite(value, super.homeOptions, () {
+      super.homeOptions = value;
+    });
+  }
+
   late final _$onInitAsyncAction =
       AsyncAction('_HomeStoreBase.onInit', context: context);
 
@@ -78,7 +94,8 @@ mixin _$HomeStore on _HomeStoreBase, Store {
     return '''
 isLoading: ${isLoading},
 accountType: ${accountType},
-teachers: ${teachers}
+teachers: ${teachers},
+homeOptions: ${homeOptions}
     ''';
   }
 }

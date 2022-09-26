@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:oratio/config/core/account_type.dart';
+import 'package:oratio/config/core/enums/account_type.dart';
 import 'package:oratio/screen/login/widgets/card/login_button.dart';
 import 'package:oratio/screen/login/widgets/card/login_image_card.dart';
 import 'package:oratio/screen/login/widgets/card/login_subtitle_card.dart';

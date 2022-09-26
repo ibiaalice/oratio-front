@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
-import 'package:oratio/config/core/account_type.dart';
+import 'package:oratio/config/core/enums/account_type.dart';
+import 'package:oratio/config/core/enums/home_options.dart';
 import 'package:oratio/config/entities/teacher.dart';
 import 'package:oratio/config/usecases/teacher/get_teachers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,10 +21,17 @@ abstract class _HomeStoreBase with Store {
   @observable
   List<Teacher> teachers = [];
 
+  @observable
+  HomeOptions homeOptions = HomeOptions.openSemester;
+
   @action
   Future<void> onInit() async {
     await _setAccountType();
     await _setTeachers();
+  }
+
+  void setHomeOptions(HomeOptions homeOptions) {
+    this.homeOptions = homeOptions;
   }
 
   @action
@@ -39,7 +47,7 @@ abstract class _HomeStoreBase with Store {
     isLoading = true;
 
     teachers = await _getTeachers();
-    
+
     isLoading = false;
   }
 }

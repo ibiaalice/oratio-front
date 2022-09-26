@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:oratio/config/core/account_type.dart';
+import 'package:oratio/config/core/enums/account_type.dart';
 import 'package:oratio/utils/style/oratio_colors.dart';
 
 class TypeRadioList extends StatelessWidget {
