@@ -36,8 +36,7 @@ abstract class _CoordinatorSectionStoreBase with Store {
   @observable
   String? errorMessage = "";
 
-  @action
-  void onInit() async {
+  Future<void> onInit() async {
     await _setTeachers();
     await _setStudents();
     await _setProjects();
@@ -82,6 +81,5 @@ abstract class _CoordinatorSectionStoreBase with Store {
 
   Future<Result> addEvaluator(Project project, int teacherId) async {
     return await _addEvaluator(project, teacherId);
-
   }
 }

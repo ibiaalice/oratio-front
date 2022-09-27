@@ -1,16 +1,16 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
+import 'package:dio/dio.dart';
 import 'package:oratio/utils/common/constants.dart';
 
 class TeacherRepository {
-  Future<List> getTeachers() async {
-    final Uri uri = Uri.parse('$API_URL/teacher/all');
+  final Dio dio = Dio();
 
-    var response = await http.get(uri);
+  Future<List> getTeachers() async {
+    var response = await dio.get('$API_URL/teacher/all');
 
     if (response.statusCode == 200) {
-      var teachersData = json.decode(response.body) as List;
+      var teachersData = response.data as List;
       return teachersData;
     }
 

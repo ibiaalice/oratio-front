@@ -41,6 +41,54 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
     });
   }
 
+  late final _$selectedTeacherIdAtom = Atom(
+      name: '_CoordinatorSectionStoreBase.selectedTeacherId', context: context);
+
+  @override
+  int? get selectedTeacherId {
+    _$selectedTeacherIdAtom.reportRead();
+    return super.selectedTeacherId;
+  }
+
+  @override
+  set selectedTeacherId(int? value) {
+    _$selectedTeacherIdAtom.reportWrite(value, super.selectedTeacherId, () {
+      super.selectedTeacherId = value;
+    });
+  }
+
+  late final _$studentsAtom =
+      Atom(name: '_CoordinatorSectionStoreBase.students', context: context);
+
+  @override
+  List<Student> get students {
+    _$studentsAtom.reportRead();
+    return super.students;
+  }
+
+  @override
+  set students(List<Student> value) {
+    _$studentsAtom.reportWrite(value, super.students, () {
+      super.students = value;
+    });
+  }
+
+  late final _$projectsAtom =
+      Atom(name: '_CoordinatorSectionStoreBase.projects', context: context);
+
+  @override
+  List<Project> get projects {
+    _$projectsAtom.reportRead();
+    return super.projects;
+  }
+
+  @override
+  set projects(List<Project> value) {
+    _$projectsAtom.reportWrite(value, super.projects, () {
+      super.projects = value;
+    });
+  }
+
   late final _$errorMessageAtom =
       Atom(name: '_CoordinatorSectionStoreBase.errorMessage', context: context);
 
@@ -61,11 +109,11 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
       ActionController(name: '_CoordinatorSectionStoreBase', context: context);
 
   @override
-  void onInit() {
+  Teacher? getTeacher(int? teacherId) {
     final _$actionInfo = _$_CoordinatorSectionStoreBaseActionController
-        .startAction(name: '_CoordinatorSectionStoreBase.onInit');
+        .startAction(name: '_CoordinatorSectionStoreBase.getTeacher');
     try {
-      return super.onInit();
+      return super.getTeacher(teacherId);
     } finally {
       _$_CoordinatorSectionStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -76,6 +124,9 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
     return '''
 isLoading: ${isLoading},
 teachers: ${teachers},
+selectedTeacherId: ${selectedTeacherId},
+students: ${students},
+projects: ${projects},
 errorMessage: ${errorMessage}
     ''';
   }
