@@ -15,7 +15,7 @@ class AddEvaluator {
       studentId: project.studentId,
       teacherId: project.teacherId,
       evaluatorId: evaluatorId,
-      evaluator2Id: project.evaluator2Id,
+      evaluatorId2: project.evaluatorId2,
       avaliable: project.avaliable,
       finalized: project.finalized,
     );
@@ -33,7 +33,7 @@ class AddEvaluator {
       studentId: project.studentId,
       teacherId: project.teacherId,
       evaluatorId: project.evaluatorId,
-      evaluator2Id: evaluatorId,
+      evaluatorId2: evaluatorId,
       avaliable: project.avaliable,
       finalized: project.finalized,
     );

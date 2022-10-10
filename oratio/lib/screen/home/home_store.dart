@@ -22,7 +22,7 @@ abstract class _HomeStoreBase with Store {
   List<Teacher> teachers = [];
 
   @observable
-  HomeOptions homeOptions = HomeOptions.openSemester;
+  HomeOptions homeOptions = HomeOptions.examinationBoard;
 
   @action
   Future<void> onInit() async {

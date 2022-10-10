@@ -6,6 +6,7 @@ import 'package:oratio/config/entities/project.dart';
 import 'package:oratio/config/entities/teacher.dart';
 import 'package:oratio/screen/home/options/coordinator_options/coordinator_section_store.dart';
 import 'package:oratio/screen/home/options/coordinator_options/examination_boards/widgets/coordinator_project_card.dart';
+import 'package:oratio/screen/home/options/coordinator_options/examination_boards/widgets/teachers_select_alert.dart';
 import 'package:oratio/screen/home/widgets/circle_pending_load.dart';
 import 'package:oratio/utils/style/oratio_colors.dart';
 
@@ -37,7 +38,8 @@ class _ExaminationOptionSectionState extends State<ExaminationOptionSection> {
         }
 
         return Expanded(
-          child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(right: 50),
             child: Container(
               color: OratioColors.white,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -49,7 +51,7 @@ class _ExaminationOptionSectionState extends State<ExaminationOptionSection> {
                       student: store.getStudent(project.studentId),
                       advisor: store.getTeacher(project.teacherId),
                       evaluator: store.getTeacher(project.evaluatorId),
-                      evaluator2: store.getTeacher(project.evaluator2Id),
+                      evaluator2: store.getTeacher(project.evaluatorId2),
                       onEdit: () {
                         log('edit');
                       },
@@ -60,50 +62,31 @@ class _ExaminationOptionSectionState extends State<ExaminationOptionSection> {
                         showDialog(
                           context: context,
                           builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Add evaluator'),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  for (Teacher teacher in store.teachers) ...[
-                                    ListTile(
-                                      title: Text(teacher.name),
-                                      onTap: () async {
-                                        final result = await store.addEvaluator(
-                                            project, teacher.id);
-                                        if (result.success) {
-                                          return showDialog(
-                                              context: context,
-                                              builder: (context) =>
-                                                  const AlertDialog(
-                                                    content: Text(
-                                                        'Avaliador adicionado com sucesso'),
-                                                  )).then((value) {
-                                            store.refresh();
-                                            return Navigator.pop(context);
-                                          });
-                                        } else {
-                                          return showDialog(
-                                              context: context,
-                                              builder: (context) =>
-                                                  const AlertDialog(
-                                                    content: Text(
-                                                        'Erro ao adicionar avaliador'),
-                                                  )).then((value) {
-                                            Navigator.of(context).pop();
-                                          });
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                ],
-                              ),
+                            return TeachersSelectAlert(
+                              teachers: store.teachers,
+                              addEvaluator: store.addEvaluator,
+                              project: project,
+                              refresh: () {
+                                store.refresh();
+                              },
                             );
                           },
                         );
                       },
                       onAddEvaluator2: () {
-                        log('add evaluator 2');
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return TeachersSelectAlert(
+                              teachers: store.teachers,
+                              addEvaluator: store.addEvaluator2,
+                              project: project,
+                              refresh: () {
+                                store.refresh();
+                              },
+                            );
+                          },
+                        );
                       },
                     ),
                   ]

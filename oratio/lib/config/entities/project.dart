@@ -7,7 +7,7 @@ class Project {
   final int studentId;
   final int? teacherId;
   final int? evaluatorId;
-  final int? evaluator2Id;
+  final int? evaluatorId2;
   final bool avaliable;
   final bool finalized;
 
@@ -20,7 +20,7 @@ class Project {
     required this.studentId,
     this.teacherId,
     this.evaluatorId,
-    this.evaluator2Id,
+    this.evaluatorId2,
     required this.avaliable,
     required this.finalized,
   });
@@ -34,7 +34,7 @@ class Project {
         studentId: json["studentId"],
         teacherId: json["teacherId"],
         evaluatorId: json["evaluatorId"],
-        evaluator2Id: json["evaluator2Id"],
+        evaluatorId2: json["evaluator2Id"],
         avaliable: json["avaliable"] ?? false,
         finalized: json["finalized"] ?? false,
       );
@@ -49,7 +49,7 @@ class Project {
       "studentId": studentId,
       "teacherId": teacherId,
       "evaluatorId": evaluatorId,
-      "evaluator2Id": evaluator2Id,
+      "evaluatorId2": evaluatorId2,
       "avaliable": avaliable,
       "finalized": finalized,
     };

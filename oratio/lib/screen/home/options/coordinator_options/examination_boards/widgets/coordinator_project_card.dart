@@ -40,8 +40,6 @@ class CoordinatorProjectCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // _iconRow(),
-
             SizedBox(
               width: screenSize.width * 0.5,
               child: Padding(

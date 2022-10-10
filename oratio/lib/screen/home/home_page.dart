@@ -35,7 +35,15 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         toolbarHeight: screenSize.height * 0.2,
         automaticallyImplyLeading: false,
-        title: const AnimatedLogo().little(context),
+        title: Observer(
+          builder: (context) => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const AnimatedLogo().little(context),
+              _optionsTitle(),
+            ],
+          ),
+        ),
         centerTitle: false,
         elevation: 0,
         backgroundColor: OratioColors.background,
@@ -50,50 +58,59 @@ class _HomePageState extends State<HomePage> {
             );
           }
 
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    HomeAside(
-                      accountType: store.accountType!,
-                      onTapOpenSemester: () {
-                        log('onTapOpenSemester');
-                        store.setHomeOptions(HomeOptions.openSemester);
-                      },
-                      onTapTeachers: () {
-                        log('onTapTeachers');
-                        store.setHomeOptions(HomeOptions.teachers);
-                      },
-                      onTapStudents: () {
-                        log('onTapStudents');
-                        store.setHomeOptions(HomeOptions.students);
-                      },
-                      onTapCalendar: () {
-                        store.setHomeOptions(HomeOptions.calendar);
-                      },
-                      onTapAttendances: () {
-                        store.setHomeOptions(HomeOptions.attendances);
-                      },
-                      onTapProjects: () {
-                        store.setHomeOptions(HomeOptions.projects);
-                      },
-                      onTapExaminationBoard: () {
-                        store.setHomeOptions(HomeOptions.examinationBoard);
-                      },
-                      onTapResults: () {
-                        store.setHomeOptions(HomeOptions.results);
-                      },
-                    ),
-                    HomeOptionsPage(homeOptions: store.homeOptions),
-                  ],
-                )
-              ],
-            ),
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              HomeAside(
+                accountType: store.accountType!,
+                onTapOpenSemester: () {
+                  log('onTapOpenSemester');
+                  store.setHomeOptions(HomeOptions.openSemester);
+                },
+                onTapTeachers: () {
+                  log('onTapTeachers');
+                  store.setHomeOptions(HomeOptions.teachers);
+                },
+                onTapStudents: () {
+                  log('onTapStudents');
+                  store.setHomeOptions(HomeOptions.students);
+                },
+                onTapCalendar: () {
+                  store.setHomeOptions(HomeOptions.calendar);
+                },
+                onTapAttendances: () {
+                  store.setHomeOptions(HomeOptions.attendances);
+                },
+                onTapProjects: () {
+                  store.setHomeOptions(HomeOptions.projects);
+                },
+                onTapExaminationBoard: () {
+                  store.setHomeOptions(HomeOptions.examinationBoard);
+                },
+                onTapResults: () {
+                  store.setHomeOptions(HomeOptions.results);
+                },
+              ),
+              Expanded(
+                child: HomeOptionsPage(homeOptions: store.homeOptions),
+              ),
+            ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _optionsTitle() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 60),
+      child: Container(
+        alignment: Alignment.topLeft,
+        child: Text(
+          store.homeOptions.name,
+          style: Theme.of(context).textTheme.headline6,
+        ),
       ),
     );
   }
