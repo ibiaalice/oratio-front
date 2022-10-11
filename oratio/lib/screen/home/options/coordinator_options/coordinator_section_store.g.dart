@@ -41,22 +41,6 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
     });
   }
 
-  late final _$selectedTeacherIdAtom = Atom(
-      name: '_CoordinatorSectionStoreBase.selectedTeacherId', context: context);
-
-  @override
-  int? get selectedTeacherId {
-    _$selectedTeacherIdAtom.reportRead();
-    return super.selectedTeacherId;
-  }
-
-  @override
-  set selectedTeacherId(int? value) {
-    _$selectedTeacherIdAtom.reportWrite(value, super.selectedTeacherId, () {
-      super.selectedTeacherId = value;
-    });
-  }
-
   late final _$studentsAtom =
       Atom(name: '_CoordinatorSectionStoreBase.students', context: context);
 
@@ -86,6 +70,38 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
   set projects(List<Project> value) {
     _$projectsAtom.reportWrite(value, super.projects, () {
       super.projects = value;
+    });
+  }
+
+  late final _$semestersAtom =
+      Atom(name: '_CoordinatorSectionStoreBase.semesters', context: context);
+
+  @override
+  List<Semester> get semesters {
+    _$semestersAtom.reportRead();
+    return super.semesters;
+  }
+
+  @override
+  set semesters(List<Semester> value) {
+    _$semestersAtom.reportWrite(value, super.semesters, () {
+      super.semesters = value;
+    });
+  }
+
+  late final _$semesterSelectedAtom = Atom(
+      name: '_CoordinatorSectionStoreBase.semesterSelected', context: context);
+
+  @override
+  Semester? get semesterSelected {
+    _$semesterSelectedAtom.reportRead();
+    return super.semesterSelected;
+  }
+
+  @override
+  set semesterSelected(Semester? value) {
+    _$semesterSelectedAtom.reportWrite(value, super.semesterSelected, () {
+      super.semesterSelected = value;
     });
   }
 
@@ -124,9 +140,10 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
     return '''
 isLoading: ${isLoading},
 teachers: ${teachers},
-selectedTeacherId: ${selectedTeacherId},
 students: ${students},
 projects: ${projects},
+semesters: ${semesters},
+semesterSelected: ${semesterSelected},
 errorMessage: ${errorMessage}
     ''';
   }

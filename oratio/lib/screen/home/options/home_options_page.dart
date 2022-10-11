@@ -18,17 +18,13 @@ class HomeOptionsPage extends StatefulWidget {
 class _HomeOptionsPageState extends State<HomeOptionsPage> {
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        _optionSection(),
-      ],
-    );
+    return _optionSection();
   }
 
   Widget _optionSection() {
     switch (widget.homeOptions) {
       case HomeOptions.openSemester:
-        return const OpenSemesterOptionSection();
+        return OpenSemesterOptionSection();
       case HomeOptions.teachers:
         return const SizedBox(
           child: Text('em desenvolvimento'),

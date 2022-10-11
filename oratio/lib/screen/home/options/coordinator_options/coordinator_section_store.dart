@@ -1,10 +1,12 @@
 import 'package:mobx/mobx.dart';
 import 'package:oratio/config/entities/project.dart';
 import 'package:oratio/config/entities/result.dart';
+import 'package:oratio/config/entities/semester.dart';
 import 'package:oratio/config/entities/student.dart';
 import 'package:oratio/config/entities/teacher.dart';
 import 'package:oratio/config/usecases/project/add_evaluator.dart';
 import 'package:oratio/config/usecases/project/get_projects.dart';
+import 'package:oratio/config/usecases/semester/get_semesters.dart';
 import 'package:oratio/config/usecases/student/get_students.dart';
 import 'package:oratio/config/usecases/teacher/get_teachers.dart';
 part 'coordinator_section_store.g.dart';
@@ -17,6 +19,7 @@ abstract class _CoordinatorSectionStoreBase with Store {
   final GetStudents _getStudents = GetStudents();
   final GetProjects _getProjects = GetProjects();
   final AddEvaluator _addEvaluator = AddEvaluator();
+  final GetSemesters _getSemesters = GetSemesters();
 
   @observable
   bool isLoading = false;
@@ -25,13 +28,16 @@ abstract class _CoordinatorSectionStoreBase with Store {
   List<Teacher> teachers = [];
 
   @observable
-  int? selectedTeacherId;
-
-  @observable
   List<Student> students = [];
 
   @observable
   List<Project> projects = [];
+
+  @observable
+  List<Semester> semesters = [];
+
+  @observable
+  Semester? semesterSelected;
 
   @observable
   String? errorMessage = "";
@@ -39,6 +45,7 @@ abstract class _CoordinatorSectionStoreBase with Store {
   Future<void> onInit() async {
     await _setTeachers();
     await _setStudents();
+    await _setSemesters();
     await _setProjects();
   }
 
@@ -55,6 +62,12 @@ abstract class _CoordinatorSectionStoreBase with Store {
 
 //aux method's
 
+  Future<void> _setSemesters() async {
+    isLoading = true;
+    semesters = await _getSemesters();
+    isLoading = false;
+  }
+
   Future<void> _setTeachers() async {
     isLoading = true;
     teachers = await _getTeachers();
@@ -67,10 +80,23 @@ abstract class _CoordinatorSectionStoreBase with Store {
     isLoading = false;
   }
 
-  Future<void> _setProjects() async {
+  Future<void> selectSemester(Semester semester) async {
     isLoading = true;
-    projects = await _getProjects();
+    semesterSelected = semester;
+    await refresh();
     isLoading = false;
+  }
+
+  Future<void> _setProjects() async {
+    if (semesterSelected == null) {
+      isLoading = true;
+      projects = await _getProjects();
+      isLoading = false;
+    } else {
+      isLoading = true;
+      projects = await _getProjects.bySemester(semesterSelected!.id);
+      isLoading = false;
+    }
   }
 
   Future<void> refresh() async {

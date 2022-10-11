@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:oratio/config/core/enums/account_type.dart';
 import 'package:oratio/config/core/enums/home_options.dart';
+import 'package:oratio/config/entities/semester.dart';
 import 'package:oratio/screen/home/widgets/home_aside/aside_option_button.dart';
 import 'package:oratio/utils/style/oratio_colors.dart';
 
 class HomeAside extends StatefulWidget {
-  final AccountType accountType;
+  final AccountType? accountType;
 
   final Function? onTapOpenSemester;
   final Function? onTapTeachers;
@@ -18,7 +19,7 @@ class HomeAside extends StatefulWidget {
 
   const HomeAside({
     Key? key,
-    required this.accountType,
+    this.accountType,
     this.onTapOpenSemester,
     this.onTapTeachers,
     this.onTapStudents,
@@ -53,7 +54,7 @@ class _HomeAsideState extends State<HomeAside> {
     );
   }
 
-  List<Widget> _setColumnList(AccountType accountType) {
+  List<Widget> _setColumnList(AccountType? accountType) {
     switch (accountType) {
       case AccountType.teacher:
         return _optionsTeacher();
@@ -61,6 +62,8 @@ class _HomeAsideState extends State<HomeAside> {
         return _optionsStudent();
       case AccountType.coordinator:
         return _optionsCoordinator();
+      default:
+        return _optionsStudent();
     }
   }
 

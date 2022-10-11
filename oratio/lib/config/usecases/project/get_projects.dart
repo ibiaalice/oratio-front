@@ -11,4 +11,10 @@ class GetProjects {
 
     return response.map((project) => Project.fromJson(project)).toList();
   }
+
+  Future<List<Project>> bySemester(int semesterId) async {
+    final response = await repository.getProjectsBySemester(semesterId);
+
+    return response.map((project) => Project.fromJson(project)).toList();
+  }
 }

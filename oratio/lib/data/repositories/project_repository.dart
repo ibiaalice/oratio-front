@@ -28,4 +28,14 @@ class ProjectRepository {
     }
     return [];
   }
+
+  Future<List> getProjectsBySemester(int semesterId) async {
+    final response = await dio.get('$API_URL/project/semester/$semesterId');
+
+    if (response.statusCode == 200) {
+      var projectsData = response.data as List;
+      return projectsData;
+    }
+    return [];
+  }
 }
