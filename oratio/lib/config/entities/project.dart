@@ -34,7 +34,7 @@ class Project {
         studentId: json["studentId"],
         teacherId: json["teacherId"],
         evaluatorId: json["evaluatorId"],
-        evaluatorId2: json["evaluator2Id"],
+        evaluatorId2: json["evaluatorId2"],
         avaliable: json["avaliable"] ?? false,
         finalized: json["finalized"] ?? false,
       );

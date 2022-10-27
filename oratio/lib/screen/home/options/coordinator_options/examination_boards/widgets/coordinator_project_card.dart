@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oratio/config/entities/project.dart';
 import 'package:oratio/config/entities/student.dart';
@@ -32,195 +35,98 @@ class CoordinatorProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-
     return Card(
-      color: OratioColors.primary,
-      child: SizedBox(
-        child: Row(
+      color: OratioColors.white,
+      child: ListTile(
+        contentPadding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+        trailing: PopupMenuButton(
+          enabled: true,
+          icon: const Icon(Icons.more_vert, color: OratioColors.black),
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              onTap: onEdit,
+              child: _titlePopMenu('Editar', OratioIcons.pencil),
+            ),
+            PopupMenuItem(
+              onTap: onDelete,
+              child: _titlePopMenu('Eliminar', OratioIcons.trash),
+            ),
+            if (project.evaluatorId == null)
+              PopupMenuItem(
+                onTap: onAddEvaluator,
+                child: _titlePopMenu('Adicionar Avaliador', OratioIcons.user),
+              ),
+            if (project.evaluatorId2 == null && project.evaluatorId != null)
+              PopupMenuItem(
+                onTap: onAddEvaluator2,
+                child: _titlePopMenu('Adicionar Avaliador 2', OratioIcons.user),
+              ),
+          ],
+        ),
+        isThreeLine: true,
+        title: _title(),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
-              width: screenSize.width * 0.5,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    _titleRow(project.title),
-                    _smallSpacer(),
-                    _secondColumn(),
-                    _smallSpacer(),
-                    _thirdLine(),
-                    if (evaluator2 != null) ...[
-                      _smallSpacer(),
-                      _fourthLine(),
-                    ],
-                  ],
-                ),
+            _subtitle('autor', student.name, context),
+            if (advisor != null)
+              _subtitle('orientador', advisor!.name, context),
+            if (evaluator != null)
+              _subtitle(
+                'avaliador: ',
+                evaluator!.name,
+                context,
               ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (evaluator == null) ...[
-                  _optionCard(
-                    iconData: OratioIcons.user,
-                    title: 'Adicionar avaliador',
-                    onTap: onAddEvaluator,
-                  ),
-                  _spacer(),
-                ],
-                if (evaluator != null && evaluator2 == null) ...[
-                  _optionCard(
-                    iconData: OratioIcons.user,
-                    title: 'Adicionar Segundo avaliador',
-                    onTap: onAddEvaluator2,
-                  ),
-                  _spacer(),
-                ],
-                _optionCard(
-                  iconData: OratioIcons.trash,
-                  title: 'Remover projeto',
-                  onTap: onDelete,
-                ),
-                _spacer(),
-                _optionCard(
-                  iconData: OratioIcons.pencil,
-                  title: 'Editar',
-                  onTap: onEdit,
-                ),
-              ],
-            )
+            if (evaluator2 != null)
+              _subtitle(
+                'segundo avaliador',
+                evaluator2!.name,
+                context,
+              ),
           ],
         ),
       ),
     );
   }
 
-  Widget _spacer() => const SizedBox(height: 20);
-  Widget _smallSpacer() => const SizedBox(height: 10);
+  Widget _title() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Text(project.title,
+          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+    );
+  }
 
-  Widget _optionCard({
-    required IconData iconData,
-    required String title,
-    required Function()? onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Row(
+  Widget _subtitle(String title, String value, context) {
+    final screenSize = MediaQuery.of(context).size;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            iconData,
+          Text(
+            '$title ',
+            style: const TextStyle(color: OratioColors.black, fontSize: 14),
           ),
-          const SizedBox(width: 10),
-          SizedBox(
-            width: 120,
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                decoration: TextDecoration.underline,
-              ),
-              maxLines: 2,
-            ),
+          Container(
+            padding: const EdgeInsets.only(left: 5),
+            width: screenSize.width * 0.1,
+            child: Text(value, style: const TextStyle(fontSize: 14)),
           ),
         ],
       ),
     );
   }
 
-  Widget _secondColumn() {
+  Widget _titlePopMenu(String value, IconData iconData) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _contentRow('Autor:'),
-            Padding(
-              padding: const EdgeInsets.only(left: 30),
-              child: _contentRow(student.name),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 200),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _subContentRow('Orientador:'),
-              Padding(
-                padding: const EdgeInsets.only(left: 30),
-                child: _subContentRow(advisor?.name ?? 'Não atribuído'),
-              ),
-            ],
-          ),
-        ),
+        Icon(iconData),
+        const SizedBox(width: 10),
+        Text(value),
       ],
-    );
-  }
-
-  Widget _thirdLine() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        _subContentRow('Avaliador:'),
-        Padding(
-          padding: const EdgeInsets.only(left: 30),
-          child: _subContentRow(evaluator?.name ?? 'Não atribuído'),
-        ),
-      ],
-    );
-  }
-
-  Widget _fourthLine() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        _subContentRow('Avaliador 2:'),
-        Padding(
-          padding: const EdgeInsets.only(left: 30),
-          child: _subContentRow(evaluator2?.name ?? 'Não atribuído'),
-        ),
-      ],
-    );
-  }
-
-  Widget _iconRow() {
-    return Container(
-      alignment: Alignment.centerRight,
-      child: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 30),
-        child: Icon(OratioIcons.textAlignLeft, size: 40),
-      ),
-    );
-  }
-
-  Widget _titleRow(String text) {
-    return Text(
-      text,
-      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-    );
-  }
-
-  Widget _contentRow(String text) {
-    return Text(
-      text,
-      style: const TextStyle(fontSize: 16),
-    );
-  }
-
-  Widget _subContentRow(String text) {
-    return Text(
-      text,
-      style: const TextStyle(fontSize: 14, color: OratioColors.medium2Grey),
     );
   }
 }

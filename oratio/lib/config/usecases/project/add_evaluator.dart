@@ -23,7 +23,7 @@ class AddEvaluator {
     return await _repository.editProject(editedProject);
   }
 
-  Future<Result> addEvaluator2(Project project, int evaluatorId) async {
+  Future<Result> addEvaluator2(Project project, int evaluatorId2) async {
     final editedProject = Project(
       id: project.id,
       title: project.title,
@@ -33,7 +33,7 @@ class AddEvaluator {
       studentId: project.studentId,
       teacherId: project.teacherId,
       evaluatorId: project.evaluatorId,
-      evaluatorId2: evaluatorId,
+      evaluatorId2: evaluatorId2,
       avaliable: project.avaliable,
       finalized: project.finalized,
     );

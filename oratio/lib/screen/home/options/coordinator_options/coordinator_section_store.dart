@@ -112,4 +112,14 @@ abstract class _CoordinatorSectionStoreBase with Store {
   Future<Result> addEvaluator2(Project project, int teacherId) async {
     return await _addEvaluator.addEvaluator2(project, teacherId);
   }
+
+  Future editProject(Project project) async {
+    // await _getProjects.editProject(project);
+    await refresh();
+  }
+
+  Future deleteProject(Project project) async {
+    // await _getProjects.deleteProject(project);
+    await refresh();
+  }
 }

@@ -46,7 +46,7 @@ class _HomeOptionsPageState extends State<HomeOptionsPage> {
           child: Text('em desenvolvimento'),
         );
       case HomeOptions.examinationBoard:
-        return ExaminationOptionSection();
+        return const ExaminationOptionSection();
       case HomeOptions.results:
         return const SizedBox(
           child: Text('em desenvolvimento'),

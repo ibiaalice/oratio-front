@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:oratio/config/entities/project.dart';
 import 'package:oratio/utils/common/constants.dart';
@@ -8,6 +10,8 @@ class ProjectRepository {
   final Dio dio = Dio();
 
   Future<Result> editProject(Project editProject) async {
+    final body = editProject.toJson();
+    log('editProject: $body');
     final response = await dio.post(
       '$API_URL/project/edit',
       data: editProject.toJson(),
