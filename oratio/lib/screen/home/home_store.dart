@@ -1,9 +1,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:oratio/config/core/enums/account_type.dart';
 import 'package:oratio/config/core/enums/home_options.dart';
-import 'package:oratio/config/entities/semester.dart';
 import 'package:oratio/config/entities/teacher.dart';
-import 'package:oratio/config/usecases/semester/get_semesters.dart';
 import 'package:oratio/config/usecases/teacher/get_teachers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 part 'home_store.g.dart';

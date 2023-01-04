@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:oratio/config/core/enums/home_options.dart';
-import 'package:oratio/config/entities/semester.dart';
 import 'package:oratio/screen/home/home_store.dart';
 import 'package:oratio/screen/home/options/home_options_page.dart';
 import 'package:oratio/screen/home/widgets/circle_pending_load.dart';

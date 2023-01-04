@@ -76,7 +76,8 @@ abstract class _CoordinatorSectionStoreBase with Store {
 
   Future<void> _setStudents() async {
     isLoading = true;
-    students = await _getStudents();
+    final newStudents = await _getStudents();
+    students = newStudents;
     isLoading = false;
   }
 
