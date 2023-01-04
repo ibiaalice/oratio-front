@@ -1,11 +1,18 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:oratio/config/entities/student.dart';
 import 'package:oratio/screen/home/options/coordinator_options/coordinator_section_store.dart';
 import 'package:oratio/screen/home/widgets/circle_pending_load.dart';
+import 'package:oratio/screen/home/widgets/modals/delete_student_modal.dart';
+import 'package:oratio/screen/home/widgets/modals/insert_students_by_sheet_modal.dart';
+import 'package:oratio/screen/home/widgets/modals/insert_students_modal.dart';
 import 'package:oratio/utils/style/oratio_colors.dart';
 import 'package:oratio/utils/style/oratio_icons.dart';
+import 'package:oratio/utils/widgets/error_message_alert.dart';
+import 'package:oratio/utils/widgets/success_message_alert.dart';
 
 class StudentsOptionsSection extends StatefulWidget {
   const StudentsOptionsSection({Key? key}) : super(key: key);
@@ -73,7 +80,33 @@ class _StudentsOptionsSectionState extends State<StudentsOptionsSection> {
                   icon: const Icon(OratioIcons.pencil),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return DeleteStudentModal(
+                            onDelete: () async {
+                              final result = await store.deleteStudent(student);
+
+                              if (result.success) {
+                                return showDialog(
+                                  context: context,
+                                  builder: (context) => SuccessMessageAlert(
+                                    message: result.message,
+                                  ),
+                                );
+                              } else {
+                                return showDialog(
+                                  context: context,
+                                  builder: (context) => ErrorMessageAlert(
+                                    message: result.message,
+                                  ),
+                                );
+                              }
+                            },
+                          );
+                        });
+                  },
                   icon: const Icon(
                     OratioIcons.trash,
                     color: OratioColors.alertRed,
@@ -97,12 +130,51 @@ class _StudentsOptionsSectionState extends State<StudentsOptionsSection> {
             Row(
               children: [
                 _insertButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return InsertStudentsModal(
+                            onInsert: (Student student) async {
+                              final result = await store.addStudent(student);
+
+                              if (result.success) {
+                                Navigator.pop(context);
+
+                                showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      const SuccessMessageAlert(
+                                    message: "Aluno adicionado com sucesso",
+                                  ),
+                                );
+                              } else {
+                                Navigator.pop(context);
+
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => const ErrorMessageAlert(
+                                    message: "Aluno não adicionado",
+                                  ),
+                                );
+                              }
+                            },
+                          );
+                        });
+                  },
                   iconData: OratioIcons.plusCircle,
                   text: 'Inserir aluno individualmente',
                 ),
                 _insertButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return InsertStudentsBySheetModal(
+                            onInsert: () {},
+                          );
+                        });
+                  },
                   iconData: OratioIcons.fileAdd,
                   text: 'Inserir alunos por tabela',
                 ),

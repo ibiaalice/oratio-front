@@ -3,6 +3,7 @@ import 'package:oratio/config/core/enums/home_options.dart';
 import 'package:oratio/screen/home/options/coordinator_options/examination_boards/examination_option_section.dart';
 import 'package:oratio/screen/home/options/coordinator_options/open_semester/open_semester_option_section.dart';
 import 'package:oratio/screen/home/options/coordinator_options/students/students_option_section.dart';
+import 'package:oratio/screen/home/options/coordinator_options/teacher_option_section/teachers_option_section.dart';
 
 class HomeOptionsPage extends StatefulWidget {
   final HomeOptions homeOptions;
@@ -26,12 +27,13 @@ class _HomeOptionsPageState extends State<HomeOptionsPage> {
     switch (widget.homeOptions) {
       case HomeOptions.openSemester:
         return const OpenSemesterOptionSection();
+
       case HomeOptions.teachers:
-        return const SizedBox(
-          child: Text('em desenvolvimento'),
-        );
+        return const TeachersOptionsSection();
+
       case HomeOptions.students:
         return const StudentsOptionsSection();
+
       case HomeOptions.calendar:
         return const SizedBox(
           child: Text('em desenvolvimento'),

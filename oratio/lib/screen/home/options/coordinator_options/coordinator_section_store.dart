@@ -7,7 +7,11 @@ import 'package:oratio/config/entities/teacher.dart';
 import 'package:oratio/config/usecases/project/add_evaluator.dart';
 import 'package:oratio/config/usecases/project/get_projects.dart';
 import 'package:oratio/config/usecases/semester/get_semesters.dart';
+import 'package:oratio/config/usecases/student/add_student.dart';
+import 'package:oratio/config/usecases/student/delete_student.dart';
 import 'package:oratio/config/usecases/student/get_students.dart';
+import 'package:oratio/config/usecases/teacher/create_teacher.dart';
+import 'package:oratio/config/usecases/teacher/delete_teacher.dart';
 import 'package:oratio/config/usecases/teacher/get_teachers.dart';
 part 'coordinator_section_store.g.dart';
 
@@ -19,7 +23,12 @@ abstract class _CoordinatorSectionStoreBase with Store {
   final GetStudents _getStudents = GetStudents();
   final GetProjects _getProjects = GetProjects();
   final AddEvaluator _addEvaluator = AddEvaluator();
+  final AddStudent _addStudent = AddStudent();
+  final DeleteStudent _deleteStudent = DeleteStudent();
   final GetSemesters _getSemesters = GetSemesters();
+
+  final AddTeacher _addTeacher = AddTeacher();
+  final DeleteTeacher _deleteTeacher = DeleteTeacher();
 
   @observable
   bool isLoading = false;
@@ -95,7 +104,7 @@ abstract class _CoordinatorSectionStoreBase with Store {
       isLoading = false;
     } else {
       isLoading = true;
-      projects = await _getProjects.bySemester(semesterSelected!.id);
+      projects = await _getProjects();
       isLoading = false;
     }
   }
@@ -112,6 +121,36 @@ abstract class _CoordinatorSectionStoreBase with Store {
 
   Future<Result> addEvaluator2(Project project, int teacherId) async {
     return await _addEvaluator.addEvaluator2(project, teacherId);
+  }
+
+  Future<Result> addStudent(Student student) async {
+    final Result result = await _addStudent(student);
+    await _setStudents();
+
+    return result;
+  }
+
+  Future<Result> deleteStudent(Student student) async {
+    final Result result = await _deleteStudent(student);
+    await _setStudents();
+
+    return result;
+  }
+
+  Future<Result> addTeacher(Teacher teacher) async {
+    final Result result = await _addTeacher(teacher);
+
+    await _setTeachers();
+
+    return result;
+  }
+
+  Future<Result> deleteTeacher(Teacher teacher) async {
+    final Result result = await _deleteTeacher(teacher);
+
+    await _setTeachers();
+
+    return result;
   }
 
   Future editProject(Project project) async {
