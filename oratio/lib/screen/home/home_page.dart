@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:oratio/config/core/enums/home_options.dart';
@@ -66,15 +64,12 @@ class _HomePageState extends State<HomePage> {
                 return HomeAside(
                   accountType: store.accountType,
                   onTapOpenSemester: () {
-                    log('onTapOpenSemester');
                     store.setHomeOptions(HomeOptions.openSemester);
                   },
                   onTapTeachers: () {
-                    log('onTapTeachers');
                     store.setHomeOptions(HomeOptions.teachers);
                   },
                   onTapStudents: () {
-                    log('onTapStudents');
                     store.setHomeOptions(HomeOptions.students);
                   },
                   onTapCalendar: () {
