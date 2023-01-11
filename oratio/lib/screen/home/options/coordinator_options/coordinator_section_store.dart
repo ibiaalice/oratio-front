@@ -7,6 +7,7 @@ import 'package:oratio/config/entities/teacher.dart';
 import 'package:oratio/config/usecases/project/add_evaluator.dart';
 import 'package:oratio/config/usecases/project/get_projects.dart';
 import 'package:oratio/config/usecases/semester/get_semesters.dart';
+import 'package:oratio/config/usecases/semester/init_semester.dart';
 import 'package:oratio/config/usecases/student/add_student.dart';
 import 'package:oratio/config/usecases/student/delete_student.dart';
 import 'package:oratio/config/usecases/student/get_students.dart';
@@ -30,8 +31,13 @@ abstract class _CoordinatorSectionStoreBase with Store {
   final AddTeacher _addTeacher = AddTeacher();
   final DeleteTeacher _deleteTeacher = DeleteTeacher();
 
+  final InitSemester _initSemester = InitSemester();
+
   @observable
   bool isLoading = false;
+
+  @observable
+  bool isActiveSemester = false;
 
   @observable
   List<Teacher> teachers = [];
@@ -56,6 +62,15 @@ abstract class _CoordinatorSectionStoreBase with Store {
     await _setStudents();
     await _setSemesters();
     await _setProjects();
+
+    if (semesters.isNotEmpty) {
+      semesterSelected = semesters.firstWhere(
+        (semester) => semester.status == 'active',
+        orElse: () => semesters.first,
+      );
+
+      isActiveSemester = semesterSelected!.status! == 'active';
+    }
   }
 
   @action
@@ -161,5 +176,12 @@ abstract class _CoordinatorSectionStoreBase with Store {
   Future deleteProject(Project project) async {
     // await _getProjects.deleteProject(project);
     await refresh();
+  }
+
+  Future<Result> initSemester(Semester semester) async {
+    final result = await _initSemester(semester);
+    if (result.success) isActiveSemester = true;
+
+    return result;
   }
 }

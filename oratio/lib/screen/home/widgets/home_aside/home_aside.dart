@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:oratio/config/core/enums/account_type.dart';
 import 'package:oratio/config/core/enums/home_options.dart';
-import 'package:oratio/config/entities/semester.dart';
 import 'package:oratio/screen/home/widgets/home_aside/aside_option_button.dart';
 import 'package:oratio/utils/style/oratio_colors.dart';
 
 class HomeAside extends StatefulWidget {
   final AccountType? accountType;
-
+  final bool isActiveSemester;
   final Function? onTapOpenSemester;
   final Function? onTapTeachers;
   final Function? onTapStudents;
@@ -28,6 +27,7 @@ class HomeAside extends StatefulWidget {
     this.onTapProjects,
     this.onTapExaminationBoard,
     this.onTapResults,
+    required this.isActiveSemester,
   }) : super(key: key);
 
   @override
@@ -89,10 +89,12 @@ class _HomeAsideState extends State<HomeAside> {
 
   List<Widget> _optionsCoordinator() {
     return [
-      AsideOptionButton(
+      if (!widget.isActiveSemester)
+        AsideOptionButton(
           iconData: HomeOptions.openSemester.icon,
           text: HomeOptions.openSemester.name,
-          onPressed: () => widget.onTapOpenSemester!()),
+          onPressed: () => widget.onTapOpenSemester!(),
+        ),
       AsideOptionButton(
         iconData: HomeOptions.teachers.icon,
         text: HomeOptions.teachers.name,

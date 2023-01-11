@@ -25,6 +25,22 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
     });
   }
 
+  late final _$isActiveSemesterAtom = Atom(
+      name: '_CoordinatorSectionStoreBase.isActiveSemester', context: context);
+
+  @override
+  bool get isActiveSemester {
+    _$isActiveSemesterAtom.reportRead();
+    return super.isActiveSemester;
+  }
+
+  @override
+  set isActiveSemester(bool value) {
+    _$isActiveSemesterAtom.reportWrite(value, super.isActiveSemester, () {
+      super.isActiveSemester = value;
+    });
+  }
+
   late final _$teachersAtom =
       Atom(name: '_CoordinatorSectionStoreBase.teachers', context: context);
 
@@ -139,6 +155,7 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
   String toString() {
     return '''
 isLoading: ${isLoading},
+isActiveSemester: ${isActiveSemester},
 teachers: ${teachers},
 students: ${students},
 projects: ${projects},

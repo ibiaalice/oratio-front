@@ -62,6 +62,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               Observer(builder: (context) {
                 return HomeAside(
+                  isActiveSemester: store.activeSemester != null,
                   accountType: store.accountType,
                   onTapOpenSemester: () {
                     store.setHomeOptions(HomeOptions.openSemester);

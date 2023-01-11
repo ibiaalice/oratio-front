@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:oratio/config/entities/semester.dart';
 import 'package:oratio/utils/common/constants.dart';
 
 class SemesterRepository {
@@ -12,5 +13,12 @@ class SemesterRepository {
       return semestersData;
     }
     return [];
+  }
+
+  Future<bool> addSemester(Semester semester) async {
+    final response =
+        await dio.post('$API_URL/semester/create', data: semester.toJson());
+
+    return response.statusCode == 200;
   }
 }
