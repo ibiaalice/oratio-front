@@ -5,6 +5,17 @@ import 'package:oratio/utils/common/constants.dart';
 class SemesterRepository {
   final Dio dio = Dio();
 
+  Future getActiveSemester() async {
+    final response = await dio.get('$API_URL/semester/active');
+
+    if (response.statusCode == 200) {
+      final semesterData = response.data;
+      return semesterData;
+    }
+
+    return null;
+  }
+
   Future<List> getSemesters() async {
     final response = await dio.get('$API_URL/semester/all');
 

@@ -7,6 +7,7 @@ import 'package:oratio/config/entities/teacher.dart';
 import 'package:oratio/config/usecases/project/add_evaluator.dart';
 import 'package:oratio/config/usecases/project/get_projects.dart';
 import 'package:oratio/config/usecases/semester/close_semester.dart';
+import 'package:oratio/config/usecases/semester/get_active_semester.dart';
 import 'package:oratio/config/usecases/semester/get_semesters.dart';
 import 'package:oratio/config/usecases/semester/init_semester.dart';
 import 'package:oratio/config/usecases/student/add_student.dart';
@@ -28,6 +29,7 @@ abstract class _CoordinatorSectionStoreBase with Store {
   final AddStudent _addStudent = AddStudent();
   final DeleteStudent _deleteStudent = DeleteStudent();
   final GetSemesters _getSemesters = GetSemesters();
+  final GetActiveSemester _getActiveSemester = GetActiveSemester();
 
   final AddTeacher _addTeacher = AddTeacher();
   final DeleteTeacher _deleteTeacher = DeleteTeacher();
@@ -60,19 +62,11 @@ abstract class _CoordinatorSectionStoreBase with Store {
   String? errorMessage = "";
 
   Future<void> onInit() async {
+    await _setActiveSemester();
     await _setTeachers();
     await _setStudents();
     await _setSemesters();
     await _setProjects();
-
-    if (semesters.isNotEmpty) {
-      semesterSelected = semesters.firstWhere(
-        (semester) => semester.status == 'active',
-        orElse: () => semesters.first,
-      );
-
-      isActiveSemester = semesterSelected!.status! == 'active';
-    }
   }
 
   @action
@@ -87,6 +81,19 @@ abstract class _CoordinatorSectionStoreBase with Store {
   }
 
 //aux method's
+
+  Future<void> _setActiveSemester() async {
+    isLoading = true;
+    final activeSemester = await _getActiveSemester();
+
+    if (activeSemester != null) {
+      semesterSelected = activeSemester;
+      isActiveSemester = true;
+    } else {
+      isActiveSemester = false;
+    }
+    isLoading = false;
+  }
 
   Future<void> _setSemesters() async {
     isLoading = true;
@@ -170,16 +177,6 @@ abstract class _CoordinatorSectionStoreBase with Store {
     return result;
   }
 
-  Future editProject(Project project) async {
-    // await _getProjects.editProject(project);
-    await refresh();
-  }
-
-  Future deleteProject(Project project) async {
-    // await _getProjects.deleteProject(project);
-    await refresh();
-  }
-
   Future<Result> initSemester(Semester semester) async {
     final result = await _initSemester(semester);
     if (result.success) isActiveSemester = true;
@@ -187,23 +184,15 @@ abstract class _CoordinatorSectionStoreBase with Store {
     return result;
   }
 
-  Semester? getActiveSemester() {
-    for (Semester semester in semesters) {
-      if (semester.status == 'ACTIVE') return semester;
-    }
-
-    return null;
-  }
-
   Future<Result> closeSemester() async {
     isLoading = true;
-    final activeSemester = getActiveSemester();
+    final activeSemester = await _getActiveSemester();
 
     if (activeSemester != null) {
       final result = await _closeSemester(activeSemester);
       if (result.success) isActiveSemester = false;
       isLoading = false;
-      
+
       return result;
     }
     isLoading = false;

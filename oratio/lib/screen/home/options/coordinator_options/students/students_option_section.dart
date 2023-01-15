@@ -129,43 +129,46 @@ class _StudentsOptionsSectionState extends State<StudentsOptionsSection> {
           children: [
             Row(
               children: [
-                _insertButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return InsertStudentsModal(
-                            onInsert: (Student student) async {
-                              final result = await store.addStudent(student);
+                if (store.isActiveSemester)
+                  _textButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return InsertStudentsModal(
+                              semesterId: store.semesterSelected!.id!,
+                              onInsert: (Student student) async {
+                                final result = await store.addStudent(student);
 
-                              if (result.success) {
-                                Navigator.pop(context);
+                                if (result.success) {
+                                  Navigator.pop(context);
 
-                                showDialog(
-                                  context: context,
-                                  builder: (context) =>
-                                      const SuccessMessageAlert(
-                                    message: "Aluno adicionado com sucesso",
-                                  ),
-                                );
-                              } else {
-                                Navigator.pop(context);
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) =>
+                                        const SuccessMessageAlert(
+                                      message: "Aluno adicionado com sucesso",
+                                    ),
+                                  );
+                                } else {
+                                  Navigator.pop(context);
 
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => const ErrorMessageAlert(
-                                    message: "Aluno não adicionado",
-                                  ),
-                                );
-                              }
-                            },
-                          );
-                        });
-                  },
-                  iconData: OratioIcons.plusCircle,
-                  text: 'Inserir aluno individualmente',
-                ),
-                _insertButton(
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) =>
+                                        const ErrorMessageAlert(
+                                      message: "Aluno não adicionado",
+                                    ),
+                                  );
+                                }
+                              },
+                            );
+                          });
+                    },
+                    iconData: OratioIcons.plusCircle,
+                    text: 'Inserir aluno individualmente',
+                  ),
+                _textButton(
                   onPressed: () {
                     showDialog(
                         context: context,
@@ -180,7 +183,7 @@ class _StudentsOptionsSectionState extends State<StudentsOptionsSection> {
                 ),
               ],
             ),
-            _insertButton(
+            _textButton(
               onPressed: () {},
               iconData: CupertinoIcons.search,
               text: 'Procurar Alunos',
@@ -191,7 +194,7 @@ class _StudentsOptionsSectionState extends State<StudentsOptionsSection> {
     );
   }
 
-  Widget _insertButton({
+  Widget _textButton({
     required VoidCallback onPressed,
     required IconData iconData,
     required String text,

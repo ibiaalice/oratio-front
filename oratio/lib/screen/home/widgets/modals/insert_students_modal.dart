@@ -4,7 +4,13 @@ import 'package:oratio/utils/style/oratio_colors.dart';
 
 class InsertStudentsModal extends StatefulWidget {
   final Function onInsert;
-  const InsertStudentsModal({super.key, required this.onInsert});
+  final int semesterId;
+
+  const InsertStudentsModal({
+    super.key,
+    required this.onInsert,
+    required this.semesterId,
+  });
 
   @override
   State<InsertStudentsModal> createState() => _InsertStudentsModalState();
@@ -43,6 +49,7 @@ class _InsertStudentsModalState extends State<InsertStudentsModal> {
                 name: nameController.text,
                 registrationCourseNumber: registrationController.text,
                 email: emailController.text,
+                semester: widget.semesterId,
               );
 
               await widget.onInsert(student);
