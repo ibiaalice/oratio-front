@@ -64,29 +64,8 @@ class _HomePageState extends State<HomePage> {
                 return HomeAside(
                   isActiveSemester: store.activeSemester != null,
                   accountType: store.accountType,
-                  onTapOpenSemester: () {
-                    store.setHomeOptions(HomeOptions.openSemester);
-                  },
-                  onTapTeachers: () {
-                    store.setHomeOptions(HomeOptions.teachers);
-                  },
-                  onTapStudents: () {
-                    store.setHomeOptions(HomeOptions.students);
-                  },
-                  onTapCalendar: () {
-                    store.setHomeOptions(HomeOptions.calendar);
-                  },
-                  onTapAttendances: () {
-                    store.setHomeOptions(HomeOptions.attendances);
-                  },
-                  onTapProjects: () {
-                    store.setHomeOptions(HomeOptions.projects);
-                  },
-                  onTapExaminationBoard: () {
-                    store.setHomeOptions(HomeOptions.examinationBoard);
-                  },
-                  onTapResults: () {
-                    store.setHomeOptions(HomeOptions.results);
+                  onTapOption: (HomeOptions option) {
+                    store.setHomeOptions(option);
                   },
                 );
               }),

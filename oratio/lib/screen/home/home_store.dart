@@ -4,7 +4,6 @@ import 'package:oratio/config/core/enums/home_options.dart';
 import 'package:oratio/config/entities/semester.dart';
 import 'package:oratio/config/entities/teacher.dart';
 import 'package:oratio/config/usecases/semester/get_semesters.dart';
-import 'package:oratio/config/usecases/teacher/get_teachers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 part 'home_store.g.dart';
 
@@ -12,7 +11,6 @@ class HomeStore = _HomeStoreBase with _$HomeStore;
 
 abstract class _HomeStoreBase with Store {
   final _preferences = SharedPreferences.getInstance();
-  final _getTeachers = GetTeachers();
   final _getSemesters = GetSemesters();
 
   @observable
@@ -35,8 +33,9 @@ abstract class _HomeStoreBase with Store {
 
   @action
   Future<void> onInit() async {
+    isLoading = true;
+
     await _setAccountType();
-    await _setTeachers();
     await _setSemesters();
 
     if (activeSemester != null) {
@@ -44,10 +43,14 @@ abstract class _HomeStoreBase with Store {
     } else {
       homeOptions = HomeOptions.openSemester;
     }
+
+    isLoading = false;
   }
 
-  void setHomeOptions(HomeOptions homeOptions) {
+  Future<void> setHomeOptions(HomeOptions homeOptions) async {
     this.homeOptions = homeOptions;
+
+    await _setSemesters();
   }
 
   @action
@@ -59,23 +62,12 @@ abstract class _HomeStoreBase with Store {
     );
   }
 
-  Future<void> _setTeachers() async {
-    isLoading = true;
-
-    teachers = await _getTeachers();
-
-    isLoading = false;
-  }
-
   Future<void> _setSemesters() async {
-    isLoading = true;
     semesters = await _getSemesters();
 
     if (semesters.isNotEmpty) {
       activeSemester =
           semesters.firstWhere((element) => element.status == 'ACTIVE');
     }
-
-    isLoading = false;
   }
 }

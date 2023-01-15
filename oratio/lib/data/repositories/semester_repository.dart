@@ -15,6 +15,13 @@ class SemesterRepository {
     return [];
   }
 
+  Future<bool> closeSemester(Semester semester) async {
+    final response = await dio.put('$API_URL/semester/${semester.id}',
+        data: semester.toEditJson());
+
+    return response.statusCode == 200;
+  }
+
   Future<bool> addSemester(Semester semester) async {
     final response =
         await dio.post('$API_URL/semester/create', data: semester.toJson());

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oratio/config/core/enums/home_options.dart';
+import 'package:oratio/screen/home/options/coordinator_options/closed_semester/closed_semester_option_section.dart';
 import 'package:oratio/screen/home/options/coordinator_options/examination_boards/examination_option_section.dart';
 import 'package:oratio/screen/home/options/coordinator_options/open_semester/open_semester_option_section.dart';
 import 'package:oratio/screen/home/options/coordinator_options/students/students_option_section.dart';
@@ -27,10 +28,10 @@ class _HomeOptionsPageState extends State<HomeOptionsPage> {
     switch (widget.homeOptions) {
       case HomeOptions.openSemester:
         return const OpenSemesterOptionSection();
-
+      case HomeOptions.closedSemester:
+        return const ClosedSemesterOptionSection();
       case HomeOptions.teachers:
         return const TeachersOptionsSection();
-
       case HomeOptions.students:
         return const StudentsOptionsSection();
 
@@ -48,6 +49,7 @@ class _HomeOptionsPageState extends State<HomeOptionsPage> {
         );
       case HomeOptions.examinationBoard:
         return const ExaminationOptionSection();
+
       case HomeOptions.results:
         return const SizedBox(
           child: Text('em desenvolvimento'),

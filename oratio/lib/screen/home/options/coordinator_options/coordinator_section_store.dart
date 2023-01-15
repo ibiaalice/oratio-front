@@ -6,6 +6,7 @@ import 'package:oratio/config/entities/student.dart';
 import 'package:oratio/config/entities/teacher.dart';
 import 'package:oratio/config/usecases/project/add_evaluator.dart';
 import 'package:oratio/config/usecases/project/get_projects.dart';
+import 'package:oratio/config/usecases/semester/close_semester.dart';
 import 'package:oratio/config/usecases/semester/get_semesters.dart';
 import 'package:oratio/config/usecases/semester/init_semester.dart';
 import 'package:oratio/config/usecases/student/add_student.dart';
@@ -32,6 +33,7 @@ abstract class _CoordinatorSectionStoreBase with Store {
   final DeleteTeacher _deleteTeacher = DeleteTeacher();
 
   final InitSemester _initSemester = InitSemester();
+  final CloseSemester _closeSemester = CloseSemester();
 
   @observable
   bool isLoading = false;
@@ -183,5 +185,29 @@ abstract class _CoordinatorSectionStoreBase with Store {
     if (result.success) isActiveSemester = true;
 
     return result;
+  }
+
+  Semester? getActiveSemester() {
+    for (Semester semester in semesters) {
+      if (semester.status == 'ACTIVE') return semester;
+    }
+
+    return null;
+  }
+
+  Future<Result> closeSemester() async {
+    isLoading = true;
+    final activeSemester = getActiveSemester();
+
+    if (activeSemester != null) {
+      final result = await _closeSemester(activeSemester);
+      if (result.success) isActiveSemester = false;
+      isLoading = false;
+      
+      return result;
+    }
+    isLoading = false;
+
+    return Result(success: false, message: 'Semestre não encontrado');
   }
 }

@@ -49,4 +49,13 @@ class Semester {
         "end": end?.toIso8601String(),
         "status": status,
       };
+
+  Map<String, dynamic> toEditJson() => {
+        "id": id,
+        "year": year,
+        "semester": semester,
+        "start": start.toIso8601String(),
+        "end": end?.toIso8601String(),
+        "status": status,
+      };
 }
