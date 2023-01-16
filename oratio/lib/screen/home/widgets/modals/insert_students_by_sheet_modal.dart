@@ -39,7 +39,10 @@ class _InsertStudentsBySheetModalState
                   ),
                 ),
               );
-            } else {}
+            } else {
+              widget.onInsert(sheetController.text);
+              Navigator.of(context).pop();
+            }
           },
           child: const Text('Adicionar'),
         ),

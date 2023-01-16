@@ -22,7 +22,7 @@ class App extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: Routers.primaryRoutes,
-      home: isLoading ? LoginPage() : HomePage(),
+      home: isLoading ? const LoginPage() : HomePage(),
     );
   }
 }

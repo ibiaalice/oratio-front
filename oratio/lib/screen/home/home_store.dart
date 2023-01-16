@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:mobx/mobx.dart';
 import 'package:oratio/config/core/enums/account_type.dart';
 import 'package:oratio/config/core/enums/home_options.dart';

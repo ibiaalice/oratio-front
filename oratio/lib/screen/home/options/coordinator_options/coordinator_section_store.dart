@@ -1,3 +1,8 @@
+// ignore_for_file: library_private_types_in_public_api
+
+import 'dart:developer';
+
+import 'package:gsheets/gsheets.dart';
 import 'package:mobx/mobx.dart';
 import 'package:oratio/config/entities/project.dart';
 import 'package:oratio/config/entities/result.dart';
@@ -16,6 +21,7 @@ import 'package:oratio/config/usecases/student/get_students.dart';
 import 'package:oratio/config/usecases/teacher/create_teacher.dart';
 import 'package:oratio/config/usecases/teacher/delete_teacher.dart';
 import 'package:oratio/config/usecases/teacher/get_teachers.dart';
+import 'package:oratio/data/services/g_sheets_services.dart';
 part 'coordinator_section_store.g.dart';
 
 class CoordinatorSectionStore = _CoordinatorSectionStoreBase
@@ -36,6 +42,8 @@ abstract class _CoordinatorSectionStoreBase with Store {
 
   final InitSemester _initSemester = InitSemester();
   final CloseSemester _closeSemester = CloseSemester();
+
+  final GSheetsServices _gSheetsServices = GSheetsServices();
 
   @observable
   bool isLoading = false;
@@ -78,6 +86,21 @@ abstract class _CoordinatorSectionStoreBase with Store {
 
   Student getStudent(int studentId) {
     return students.firstWhere((student) => student.id == studentId);
+  }
+
+  @action
+  Future<Result> addStudentBySpreedsheet(String spreadsheet) async {
+    final spreadsheetParts = spreadsheet.split("/");
+
+    final spreadsheetId = spreadsheetParts[5];
+    isLoading = true;
+
+    final result =
+        await _gSheetsServices.addStudentBySpreedsheet(spreadsheetId);
+    await _setStudents();
+    isLoading = false;
+
+    return result;
   }
 
 //aux method's
