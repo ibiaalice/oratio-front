@@ -168,7 +168,13 @@ class _TeachersOptionsSectionState extends State<TeachersOptionsSection> {
                     showDialog(
                       context: context,
                       builder: (context) => InsertTeachersBySheetModal(
-                        onInsert: () {},
+                        onInsert: (String sheet) async {
+                          final result =
+                              await store.addTeacherBySpreedsheet(sheet);
+
+                          if (result.success) {}
+                          else {}
+                        },
                       ),
                     );
                   },

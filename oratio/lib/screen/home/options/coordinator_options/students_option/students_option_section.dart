@@ -177,6 +177,27 @@ class _StudentsOptionsSectionState extends State<StudentsOptionsSection> {
                             onInsert: (String spreedsheatsId) async {
                               final result = await store
                                   .addStudentBySpreedsheet(spreedsheatsId);
+
+                              if (result.success) {
+                                Navigator.pop(context);
+
+                                showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      const SuccessMessageAlert(
+                                    message: "Alunos adicionado com sucesso",
+                                  ),
+                                );
+                              } else {
+                                Navigator.pop(context);
+
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => const ErrorMessageAlert(
+                                    message: "Alunos não adicionado",
+                                  ),
+                                );
+                              }
                             },
                           );
                         });

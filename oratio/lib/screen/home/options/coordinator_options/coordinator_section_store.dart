@@ -103,6 +103,21 @@ abstract class _CoordinatorSectionStoreBase with Store {
     return result;
   }
 
+  @action
+  Future<Result> addTeacherBySpreedsheet(String spreadsheet) async {
+    final spreadsheetParts = spreadsheet.split("/");
+
+    final spreadsheetId = spreadsheetParts[5];
+    isLoading = true;
+
+    final result =
+        await _gSheetsServices.addTeacherBySpreedsheet(spreadsheetId);
+    await _setTeachers();
+    isLoading = false;
+
+    return result;
+  }
+
 //aux method's
 
   Future<void> _setActiveSemester() async {
