@@ -52,6 +52,9 @@ abstract class _CoordinatorSectionStoreBase with Store {
   bool isActiveSemester = false;
 
   @observable
+  Student? studentSelected;
+
+  @observable
   List<Teacher> teachers = [];
 
   @observable
@@ -75,6 +78,13 @@ abstract class _CoordinatorSectionStoreBase with Store {
     await _setStudents();
     await _setSemesters();
     await _setProjects();
+  }
+
+  @action
+  void setStudentSelected(Student student) {
+    isLoading = true;
+    studentSelected = student;
+    isLoading = false;
   }
 
   @action

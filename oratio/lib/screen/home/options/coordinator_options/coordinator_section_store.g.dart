@@ -41,6 +41,22 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
     });
   }
 
+  late final _$studentSelectedAtom = Atom(
+      name: '_CoordinatorSectionStoreBase.studentSelected', context: context);
+
+  @override
+  Student? get studentSelected {
+    _$studentSelectedAtom.reportRead();
+    return super.studentSelected;
+  }
+
+  @override
+  set studentSelected(Student? value) {
+    _$studentSelectedAtom.reportWrite(value, super.studentSelected, () {
+      super.studentSelected = value;
+    });
+  }
+
   late final _$teachersAtom =
       Atom(name: '_CoordinatorSectionStoreBase.teachers', context: context);
 
@@ -137,8 +153,39 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
     });
   }
 
+  late final _$addStudentBySpreedsheetAsyncAction = AsyncAction(
+      '_CoordinatorSectionStoreBase.addStudentBySpreedsheet',
+      context: context);
+
+  @override
+  Future<Result> addStudentBySpreedsheet(String spreadsheet) {
+    return _$addStudentBySpreedsheetAsyncAction
+        .run(() => super.addStudentBySpreedsheet(spreadsheet));
+  }
+
+  late final _$addTeacherBySpreedsheetAsyncAction = AsyncAction(
+      '_CoordinatorSectionStoreBase.addTeacherBySpreedsheet',
+      context: context);
+
+  @override
+  Future<Result> addTeacherBySpreedsheet(String spreadsheet) {
+    return _$addTeacherBySpreedsheetAsyncAction
+        .run(() => super.addTeacherBySpreedsheet(spreadsheet));
+  }
+
   late final _$_CoordinatorSectionStoreBaseActionController =
       ActionController(name: '_CoordinatorSectionStoreBase', context: context);
+
+  @override
+  void setStudentSelected(Student student) {
+    final _$actionInfo = _$_CoordinatorSectionStoreBaseActionController
+        .startAction(name: '_CoordinatorSectionStoreBase.setStudentSelected');
+    try {
+      return super.setStudentSelected(student);
+    } finally {
+      _$_CoordinatorSectionStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   Teacher? getTeacher(int? teacherId) {
@@ -156,6 +203,7 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
     return '''
 isLoading: ${isLoading},
 isActiveSemester: ${isActiveSemester},
+studentSelected: ${studentSelected},
 teachers: ${teachers},
 students: ${students},
 projects: ${projects},

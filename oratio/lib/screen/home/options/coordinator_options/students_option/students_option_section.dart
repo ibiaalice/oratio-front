@@ -9,6 +9,7 @@ import 'package:oratio/screen/home/widgets/circle_pending_load.dart';
 import 'package:oratio/screen/home/widgets/modals/delete_student_modal.dart';
 import 'package:oratio/screen/home/widgets/modals/insert_students_by_sheet_modal.dart';
 import 'package:oratio/screen/home/widgets/modals/insert_students_modal.dart';
+import 'package:oratio/screen/home/widgets/student_profile/student_profile_page.dart';
 import 'package:oratio/utils/style/oratio_colors.dart';
 import 'package:oratio/utils/style/oratio_icons.dart';
 import 'package:oratio/utils/widgets/error_message_alert.dart';
@@ -34,6 +35,16 @@ class _StudentsOptionsSectionState extends State<StudentsOptionsSection> {
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
       if (store.isLoading) return const CirclePendingLoad();
+
+      if (store.studentSelected != null) {
+        return Container(
+          padding: const EdgeInsets.only(right: 40),
+          child: StudentProfile(
+            student: store.studentSelected!,
+            onBack: () => store.studentSelected = null,
+          ),
+        );
+      }
       return Container(
         padding: const EdgeInsets.only(right: 40),
         child: Column(
@@ -65,7 +76,15 @@ class _StudentsOptionsSectionState extends State<StudentsOptionsSection> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(student.name, style: const TextStyle(fontSize: 20)),
+                TextButton(
+                  onPressed: () {
+                    store.setStudentSelected(student);
+                  },
+                  child: Text(
+                    student.name,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ),
                 const SizedBox(height: 10),
                 Text(student.email, style: const TextStyle(fontSize: 15)),
                 const SizedBox(height: 10),

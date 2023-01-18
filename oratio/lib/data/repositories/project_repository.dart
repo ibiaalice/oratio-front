@@ -42,4 +42,10 @@ class ProjectRepository {
     }
     return [];
   }
+
+  Future<Response> getProjectByStudentId(int studentId) async {
+    final response = await dio.get('$API_URL/project/$studentId');
+
+    return response;
+  }
 }

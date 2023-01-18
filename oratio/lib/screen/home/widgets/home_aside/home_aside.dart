@@ -97,31 +97,11 @@ class _HomeAsideState extends State<HomeAside> {
         text: HomeOptions.students.name,
         onPressed: () => widget.onTapOption(HomeOptions.students),
       ),
-      // AsideOptionButton(
-      //   iconData: HomeOptions.calendar.icon,
-      //   text: HomeOptions.calendar.name,
-      //   onPressed: () => widget.onTapCalendar!(),
-      // ),
-      // AsideOptionButton(
-      //   iconData: HomeOptions.attendances.icon,
-      //   text: HomeOptions.attendances.name,
-      //   onPressed: () => widget.onTapAttendances!(),
-      // ),
       AsideOptionButton(
         iconData: HomeOptions.projects.icon,
         text: HomeOptions.projects.name,
         onPressed: () => widget.onTapOption(HomeOptions.projects),
       ),
-      AsideOptionButton(
-        iconData: HomeOptions.examinationBoard.icon,
-        text: HomeOptions.examinationBoard.name,
-        onPressed: () => widget.onTapOption(HomeOptions.examinationBoard),
-      ),
-      // AsideOptionButton(
-      //   iconData: HomeOptions.results.icon,
-      //   text: HomeOptions.results.name,
-      //   onPressed: () => widget.onTapResults!(),
-      // ),
     ];
   }
 }
