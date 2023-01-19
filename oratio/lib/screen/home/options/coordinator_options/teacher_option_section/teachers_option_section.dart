@@ -6,7 +6,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:oratio/config/entities/teacher.dart';
 import 'package:oratio/screen/home/options/coordinator_options/coordinator_section_store.dart';
 import 'package:oratio/screen/home/widgets/circle_pending_load.dart';
-import 'package:oratio/screen/home/widgets/modals/delete_teacher_modal.dart';
+import 'package:oratio/screen/home/widgets/modals/delete_project_modal.dart';
 import 'package:oratio/screen/home/widgets/modals/insert_teachers_by_sheet_modal.dart';
 import 'package:oratio/screen/home/widgets/modals/insert_teachers_modal.dart';
 import 'package:oratio/utils/style/oratio_colors.dart';
@@ -82,7 +82,10 @@ class _TeachersOptionsSectionState extends State<TeachersOptionsSection> {
                     showDialog(
                         context: context,
                         builder: (context) {
-                          return DeleteTeacherModal(
+                          return DeleteModal(
+                            title: 'Excluir professor',
+                            message:
+                                'Deseja Excluir o professor ${teacher.name}?',
                             onDelete: () async {
                               final result = await store.deleteTeacher(teacher);
 
@@ -172,8 +175,8 @@ class _TeachersOptionsSectionState extends State<TeachersOptionsSection> {
                           final result =
                               await store.addTeacherBySpreedsheet(sheet);
 
-                          if (result.success) {}
-                          else {}
+                          if (result.success) {
+                          } else {}
                         },
                       ),
                     );

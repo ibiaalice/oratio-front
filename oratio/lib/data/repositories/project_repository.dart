@@ -9,6 +9,12 @@ import '../../config/entities/result.dart';
 class ProjectRepository {
   final Dio dio = Dio();
 
+  Future<bool> delete(Project project) async {
+    final response = await dio.delete('$API_URL/project/delete/${project.id}');
+
+    return response.statusCode == 200;
+  }
+
   Future<Result> editProject(Project editProject) async {
     final body = editProject.toJson();
     log('editProject: $body');

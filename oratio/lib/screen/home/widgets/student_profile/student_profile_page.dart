@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:oratio/config/core/format_data.dart';
+import 'package:oratio/config/entities/accompaniments.dart';
 import 'package:oratio/config/entities/student.dart';
+import 'package:oratio/screen/home/widgets/modals/delete_project_modal.dart';
 import 'package:oratio/screen/home/widgets/student_profile/student_profile_store.dart';
 import 'package:oratio/utils/style/oratio_colors.dart';
+import 'package:oratio/utils/widgets/error_message_alert.dart';
+import 'dart:js' as js;
+
+import 'package:oratio/utils/widgets/success_message_alert.dart';
 
 class StudentProfile extends StatefulWidget {
   final Student student;
@@ -40,11 +47,13 @@ class _StudentProfileState extends State<StudentProfile> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeader(),
+              _profileHeader(),
               _titleProfile(title: 'Detalhes do aluno'),
               _detailsProfile(),
               _titleProfile(title: 'Projeto'),
+              _detailsProject(),
               _titleProfile(title: 'Acompanhamentos'),
+              _accompanimentsProfileDetails(),
             ],
           ),
         ),
@@ -81,7 +90,208 @@ class _StudentProfileState extends State<StudentProfile> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _detailsProject() {
+    if (store.project == null) {
+      return Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: TextButton(
+            onPressed: () {}, child: const Text('Cadastrar projeto')),
+      );
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Container(
+        padding: const EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          border: Border.all(color: OratioColors.black),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(store.project!.title,
+                    style: const TextStyle(fontSize: 16.0)),
+                const SizedBox(height: 10.0),
+                const SizedBox(height: 10.0),
+                TextButton(
+                  onPressed: () {
+                    js.context.callMethod('open', [store.project!.link]);
+                  },
+                  child: Text(
+                    '${store.project!.link}',
+                    style: const TextStyle(fontSize: 16.0),
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () {},
+                  child: const Text('Editar projeto'),
+                ),
+                TextButton(
+                    onPressed: () {}, child: const Text('Adicionar avaliador')),
+                TextButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => DeleteModal(
+                        onDelete: () async {
+                          final result = await store.deleteProject();
+                          if (result.success) {
+                            const SuccessMessageAlert(
+                              message: 'Projeto excluído com sucesso!',
+                            );
+                          } else {
+                            const ErrorMessageAlert(
+                              message: 'Erro ao excluir projeto!',
+                            );
+                          }
+                        },
+                        title: 'Excluir projeto',
+                        message: 'Tem certeza que deseja excluir o projeto?',
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    'Excluir projeto',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _accompanimentsProfileDetails() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(30),
+          child: TextButton(
+            child: const Text('Adicionar acompanhamento'),
+            onPressed: () {},
+          ),
+        ),
+        if (store.accompaniments.isNotEmpty) ...[
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(children: [
+              for (Accompaniments accompaniments in store.accompaniments) ...[
+                _accompanimentsItem(accompaniments: accompaniments)
+              ]
+            ]),
+          )
+        ],
+        const SizedBox(height: 80),
+      ],
+    );
+  }
+
+  Widget _accompanimentsItem({required Accompaniments accompaniments}) {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Container(
+        padding: const EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          border: Border.all(color: OratioColors.black),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(formatData(accompaniments.createdDate),
+                style: const TextStyle(fontSize: 16.0)),
+            const SizedBox(height: 10.0),
+            Text('${accompaniments.description}',
+                style: const TextStyle(fontSize: 16.0)),
+            const SizedBox(height: 20.0),
+            if (accompaniments.link != null)
+              Row(
+                children: [
+                  const Text('Arquivo anexado:'),
+                  TextButton(
+                    onPressed: () {
+                      js.context.callMethod('open', [store.project!.link]);
+                    },
+                    child: Text(
+                      '${accompaniments.link}',
+                      style: const TextStyle(fontSize: 16.0),
+                    ),
+                  ),
+                ],
+              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () {},
+                  child: const Text('Editar'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return DeleteModal(
+                            message: 'Deseja excluir o acompanhamento?',
+                            title: 'Excluir acompanhamento',
+                            onDelete: () async {
+                              final result = await store
+                                  .deleteAccompaniments(accompaniments);
+
+                              if (result.success) {
+                                return showDialog(
+                                  context: context,
+                                  builder: (context) => SuccessMessageAlert(
+                                    message: result.message,
+                                  ),
+                                );
+                              } else {
+                                return showDialog(
+                                  context: context,
+                                  builder: (context) => ErrorMessageAlert(
+                                    message: result.message,
+                                  ),
+                                );
+                              }
+                            },
+                          );
+                        });
+                  },
+                  child: const Text(
+                    'Excluir',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _profileHeader() {
     return Container(
       color: OratioColors.white,
       child: Row(

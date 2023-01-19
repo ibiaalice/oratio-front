@@ -57,12 +57,46 @@ mixin _$StudentProfileStore on _StudentProfileBase, Store {
     });
   }
 
+  late final _$accompanimentsAtom =
+      Atom(name: '_StudentProfileBase.accompaniments', context: context);
+
+  @override
+  List<Accompaniments> get accompaniments {
+    _$accompanimentsAtom.reportRead();
+    return super.accompaniments;
+  }
+
+  @override
+  set accompaniments(List<Accompaniments> value) {
+    _$accompanimentsAtom.reportWrite(value, super.accompaniments, () {
+      super.accompaniments = value;
+    });
+  }
+
+  late final _$_setProjectAsyncAction =
+      AsyncAction('_StudentProfileBase._setProject', context: context);
+
+  @override
+  Future<void> _setProject() {
+    return _$_setProjectAsyncAction.run(() => super._setProject());
+  }
+
+  late final _$_setAccompanimentsAsyncAction =
+      AsyncAction('_StudentProfileBase._setAccompaniments', context: context);
+
+  @override
+  Future<void> _setAccompaniments() {
+    return _$_setAccompanimentsAsyncAction
+        .run(() => super._setAccompaniments());
+  }
+
   @override
   String toString() {
     return '''
 isLoading: ${isLoading},
 student: ${student},
-project: ${project}
+project: ${project},
+accompaniments: ${accompaniments}
     ''';
   }
 }
