@@ -1,28 +1,28 @@
 class Project {
-  final int id;
+  final int? id;
   final String title;
   String? description;
   final String? link;
-  final String status;
+  final String? status;
   final int studentId;
   final int? teacherId;
   final int? evaluatorId;
   final int? evaluatorId2;
-  final bool avaliable;
-  final bool finalized;
+  final bool? avaliable;
+  final bool? finalized;
 
   Project({
-    required this.id,
+    this.id,
     required this.title,
     this.description,
     this.link,
-    required this.status,
+    this.status,
     required this.studentId,
     this.teacherId,
     this.evaluatorId,
     this.evaluatorId2,
-    required this.avaliable,
-    required this.finalized,
+    this.avaliable,
+    this.finalized,
   });
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(
@@ -41,7 +41,6 @@ class Project {
 
   Map toJson() {
     return {
-      "id": id,
       "title": title,
       "description": description,
       "link": link,

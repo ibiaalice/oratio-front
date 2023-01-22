@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:oratio/config/core/format_data.dart';
 import 'package:oratio/config/entities/accompaniments.dart';
+import 'package:oratio/config/entities/project.dart';
 import 'package:oratio/config/entities/student.dart';
 import 'package:oratio/screen/home/widgets/modals/delete_project_modal.dart';
+import 'package:oratio/screen/home/widgets/modals/insert_accompaniments_modal.dart';
+import 'package:oratio/screen/home/widgets/modals/insert_project_modal.dart';
 import 'package:oratio/screen/home/widgets/student_profile/student_profile_store.dart';
 import 'package:oratio/utils/style/oratio_colors.dart';
 import 'package:oratio/utils/widgets/error_message_alert.dart';
@@ -39,6 +42,9 @@ class _StudentProfileState extends State<StudentProfile> {
     final screenSize = MediaQuery.of(context).size;
 
     return Observer(builder: (_) {
+      if (store.isLoading) {
+        return const Center(child: CircularProgressIndicator());
+      }
       return SingleChildScrollView(
         child: Container(
           color: OratioColors.white,
@@ -95,7 +101,36 @@ class _StudentProfileState extends State<StudentProfile> {
       return Padding(
         padding: const EdgeInsets.all(18.0),
         child: TextButton(
-            onPressed: () {}, child: const Text('Cadastrar projeto')),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return InsertProjectModal(
+                      teachers: store.teachers,
+                      student: store.student!,
+                      onInsert: (Project project) async {
+                        final result = await store.addProject(project);
+
+                        if (result.success) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return SuccessMessageAlert(
+                                    message: result.message);
+                              });
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return ErrorMessageAlert(
+                                    message: result.message);
+                              });
+                        }
+                      },
+                    );
+                  });
+            },
+            child: const Text('Cadastrar projeto')),
       );
     }
     return Padding(
@@ -122,9 +157,13 @@ class _StudentProfileState extends State<StudentProfile> {
                   onPressed: () {
                     js.context.callMethod('open', [store.project!.link]);
                   },
-                  child: Text(
-                    '${store.project!.link}',
-                    style: const TextStyle(fontSize: 16.0),
+                  child: Container(
+                    width: 200,
+                    child: Text(
+                      '${store.project!.link}',
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 16.0),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10.0),
@@ -186,7 +225,38 @@ class _StudentProfileState extends State<StudentProfile> {
           padding: const EdgeInsets.all(30),
           child: TextButton(
             child: const Text('Adicionar acompanhamento'),
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return InsertAccompanimentsModal(
+                      student: store.student!,
+                      onInsert: (Accompaniments accompaniments) async {
+                        final result =
+                            await store.addAccompaniments(accompaniments);
+
+                        if (result.success) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return SuccessMessageAlert(
+                                  message: result.message,
+                                );
+                              });
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return ErrorMessageAlert(
+                                message: result.message,
+                              );
+                            },
+                          );
+                        }
+                      },
+                    );
+                  });
+            },
           ),
         ),
         if (store.accompaniments.isNotEmpty) ...[
@@ -223,7 +293,7 @@ class _StudentProfileState extends State<StudentProfile> {
             Text('${accompaniments.description}',
                 style: const TextStyle(fontSize: 16.0)),
             const SizedBox(height: 20.0),
-            if (accompaniments.link != null)
+            if (accompaniments.link != null && accompaniments.link!.isNotEmpty)
               Row(
                 children: [
                   const Text('Arquivo anexado:'),
@@ -231,9 +301,13 @@ class _StudentProfileState extends State<StudentProfile> {
                     onPressed: () {
                       js.context.callMethod('open', [store.project!.link]);
                     },
-                    child: Text(
-                      '${accompaniments.link}',
-                      style: const TextStyle(fontSize: 16.0),
+                    child: SizedBox(
+                      width: 400,
+                      child: Text(
+                        '${accompaniments.link}',
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 16.0),
+                      ),
                     ),
                   ),
                 ],

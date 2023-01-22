@@ -54,4 +54,11 @@ class ProjectRepository {
 
     return response;
   }
+
+  Future<bool> createProject(Project project) async {
+    final response =
+        await dio.post('$API_URL/project/create', data: project.toJson());
+
+    return (response.statusCode == 200);
+  }
 }

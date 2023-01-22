@@ -33,7 +33,7 @@ class CoordinatorProjectCard extends StatelessWidget {
     return Card(
       child: ListTile(
         title: Text(project.title),
-        subtitle: Text(project.status),
+        subtitle: Text(project.status!),
       ),
     );
 

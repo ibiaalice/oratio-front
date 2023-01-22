@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:html';
 
 import 'package:dio/dio.dart';
 import 'package:oratio/config/entities/project.dart';
@@ -13,7 +16,13 @@ class GetProjectByStudentId {
         await _projectRepository.getProjectByStudentId(studentId);
 
     if (response.statusCode == 200) {
-      return Project.fromJson(response.data);
+      try {
+        final Project project = Project.fromJson(response.data);
+
+        return project;
+      } catch (e) {
+        log(e.toString());
+      }
     }
 
     return null;
