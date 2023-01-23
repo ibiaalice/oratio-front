@@ -139,6 +139,14 @@ mixin _$StudentProfileStore on _StudentProfileBase, Store {
     return _$addProjectAsyncAction.run(() => super.addProject(project));
   }
 
+  late final _$editProjectAsyncAction =
+      AsyncAction('_StudentProfileBase.editProject', context: context);
+
+  @override
+  Future<Result> editProject(Project project) {
+    return _$editProjectAsyncAction.run(() => super.editProject(project));
+  }
+
   late final _$addAccompanimentsAsyncAction =
       AsyncAction('_StudentProfileBase.addAccompaniments', context: context);
 
@@ -154,6 +162,20 @@ mixin _$StudentProfileStore on _StudentProfileBase, Store {
   @override
   Future<Result> addEvaluator(Teacher teacher) {
     return _$addEvaluatorAsyncAction.run(() => super.addEvaluator(teacher));
+  }
+
+  late final _$_StudentProfileBaseActionController =
+      ActionController(name: '_StudentProfileBase', context: context);
+
+  @override
+  Teacher getTeacherById(int id) {
+    final _$actionInfo = _$_StudentProfileBaseActionController.startAction(
+        name: '_StudentProfileBase.getTeacherById');
+    try {
+      return super.getTeacherById(id);
+    } finally {
+      _$_StudentProfileBaseActionController.endAction(_$actionInfo);
+    }
   }
 
   @override

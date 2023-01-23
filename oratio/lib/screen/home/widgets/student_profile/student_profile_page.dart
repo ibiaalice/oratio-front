@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_web_libraries_in_flutter
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:oratio/config/core/format_data.dart';
@@ -8,6 +10,7 @@ import 'package:oratio/config/entities/teacher.dart';
 import 'package:oratio/screen/home/widgets/circle_pending_load.dart';
 import 'package:oratio/screen/home/widgets/modals/add_evaluator_modal.dart';
 import 'package:oratio/screen/home/widgets/modals/delete_project_modal.dart';
+import 'package:oratio/screen/home/widgets/modals/edit_project_modal.dart';
 import 'package:oratio/screen/home/widgets/modals/insert_accompaniments_modal.dart';
 import 'package:oratio/screen/home/widgets/modals/insert_project_modal.dart';
 import 'package:oratio/screen/home/widgets/student_profile/student_profile_store.dart';
@@ -98,6 +101,13 @@ class _StudentProfileState extends State<StudentProfile> {
     );
   }
 
+  Widget _titleInfo(String info) => Text(
+        info,
+        style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+      );
+
+  Widget _spacer() => const SizedBox(height: 10.0);
+
   Widget _detailsProject() {
     if (store.project == null) {
       return Padding(
@@ -151,24 +161,50 @@ class _StudentProfileState extends State<StudentProfile> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                _titleInfo('Título:'),
                 Text(store.project!.title,
                     style: const TextStyle(fontSize: 16.0)),
-                const SizedBox(height: 10.0),
-                const SizedBox(height: 10.0),
-                TextButton(
-                  onPressed: () {
-                    js.context.callMethod('open', [store.project!.link]);
-                  },
-                  child: SizedBox(
-                    width: 200,
-                    child: Text(
-                      '${store.project!.link}',
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 16.0),
+                _spacer(),
+                if (store.project!.description != null) ...[
+                  _titleInfo('Descrição:'),
+                  Text(store.project!.description!,
+                      style: const TextStyle(fontSize: 16.0)),
+                  _spacer(),
+                ],
+                if (store.project!.link != null) ...[
+                  _titleInfo('Link:'),
+                  TextButton(
+                    onPressed: () {
+                      js.context.callMethod('open', [store.project!.link]);
+                    },
+                    child: SizedBox(
+                      width: 200,
+                      child: Text(
+                        '${store.project!.link}',
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 16.0),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10.0),
+                  _spacer()
+                ],
+                if (store.project?.teacherId != null) ...[
+                  _titleInfo('Orientador:'),
+                  Text(
+                    store.getTeacherById(store.project!.teacherId!).name,
+                    style: const TextStyle(fontSize: 16.0),
+                  ),
+                  _spacer()
+                ],
+                if (store.project!.evaluatorId != null) ...[
+                  _titleInfo('Avaliador:'),
+                  Text(
+                    store.getTeacherById(store.project!.evaluatorId!).name,
+                    style: const TextStyle(fontSize: 16.0),
+                  ),
+                  _spacer()
+                ],
+                _spacer()
               ],
             ),
             Column(
@@ -176,7 +212,38 @@ class _StudentProfileState extends State<StudentProfile> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return EditProjectModal(
+                            teacher:
+                                store.getTeacherById(store.project!.teacherId!),
+                            student: store.student!,
+                            teachers: store.teachers,
+                            project: store.project!,
+                            onEditProject: (Project project) async {
+                              final result = await store.editProject(project);
+
+                              if (result.success) {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return SuccessMessageAlert(
+                                          message: result.message);
+                                    });
+                              } else {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return ErrorMessageAlert(
+                                          message: result.message);
+                                    });
+                              }
+                            },
+                          );
+                        });
+                  },
                   child: const Text('Editar projeto'),
                 ),
                 TextButton(
@@ -209,7 +276,11 @@ class _StudentProfileState extends State<StudentProfile> {
                             );
                           });
                     },
-                    child: const Text('Adicionar avaliador')),
+                    child: Text(
+                      store.project?.evaluatorId == null
+                          ? 'Adicionar avaliador'
+                          : 'Trocar avaliador',
+                    )),
                 TextButton(
                   onPressed: () {
                     showDialog(

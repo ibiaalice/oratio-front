@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:developer';
-import 'dart:html';
 
 import 'package:dio/dio.dart';
 import 'package:oratio/config/entities/project.dart';
@@ -12,17 +10,22 @@ class GetProjectByStudentId {
   GetProjectByStudentId();
 
   Future<Project?> call(int studentId) async {
-    final Response response =
-        await _projectRepository.getProjectByStudentId(studentId);
+    try {
+      final Response response =
+          await _projectRepository.getProjectByStudentId(studentId);
 
-    if (response.statusCode == 200) {
-      try {
-        final Project project = Project.fromJson(response.data);
+      if (response.statusCode == 200) {
+        try {
+          final Project project = Project.fromJson(response.data);
 
-        return project;
-      } catch (e) {
-        log(e.toString());
+          return project;
+        } catch (e) {
+          log(e.toString());
+          return null;
+        }
       }
+    } catch (e) {
+      log(e.toString());
     }
 
     return null;

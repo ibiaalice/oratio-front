@@ -12,6 +12,7 @@ import 'package:oratio/config/usecases/accompaniments/get_accompaniments.dart';
 import 'package:oratio/config/usecases/project/add_evaluator.dart';
 import 'package:oratio/config/usecases/project/add_project.dart';
 import 'package:oratio/config/usecases/project/delete_project.dart';
+import 'package:oratio/config/usecases/project/edit_project.dart';
 import 'package:oratio/config/usecases/project/get_project_by_student_id.dart';
 import 'package:oratio/config/usecases/teacher/get_teachers.dart';
 part 'student_profile_store.g.dart';
@@ -27,6 +28,7 @@ abstract class _StudentProfileBase with Store {
   final AddProject _addProject = AddProject();
   final AddAccompaniments _addAccompaniments = AddAccompaniments();
   final AddEvaluator _addEvaluator = AddEvaluator();
+  final EditProject _editProject = EditProject();
 
   @observable
   bool isLoading = false;
@@ -103,6 +105,21 @@ abstract class _StudentProfileBase with Store {
     isLoading = false;
 
     return result;
+  }
+
+  @action
+  Future<Result> editProject(Project project) async {
+    isLoading = true;
+    final result = await _editProject(project);
+    await _setProject();
+    isLoading = false;
+
+    return result;
+  }
+
+  @action
+  Teacher getTeacherById(int id) {
+    return teachers.firstWhere((teacher) => teacher.id == id);
   }
 
   @action
