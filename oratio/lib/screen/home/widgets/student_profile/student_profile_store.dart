@@ -9,6 +9,7 @@ import 'package:oratio/config/entities/teacher.dart';
 import 'package:oratio/config/usecases/accompaniments/add_accompaniments.dart';
 import 'package:oratio/config/usecases/accompaniments/delete_accompaniments.dart';
 import 'package:oratio/config/usecases/accompaniments/get_accompaniments.dart';
+import 'package:oratio/config/usecases/project/add_evaluator.dart';
 import 'package:oratio/config/usecases/project/add_project.dart';
 import 'package:oratio/config/usecases/project/delete_project.dart';
 import 'package:oratio/config/usecases/project/get_project_by_student_id.dart';
@@ -25,6 +26,7 @@ abstract class _StudentProfileBase with Store {
   final DeleteProject _deleteProject = DeleteProject();
   final AddProject _addProject = AddProject();
   final AddAccompaniments _addAccompaniments = AddAccompaniments();
+  final AddEvaluator _addEvaluator = AddEvaluator();
 
   @observable
   bool isLoading = false;
@@ -108,6 +110,17 @@ abstract class _StudentProfileBase with Store {
     isLoading = true;
     final result = await _addAccompaniments(accompaniments);
     await _setAccompaniments();
+    isLoading = false;
+
+    return result;
+  }
+
+  @action
+  Future<Result> addEvaluator(Teacher teacher) async {
+    isLoading = true;
+
+    final result = await _addEvaluator(project!, teacher.id!);
+    await _setProject();
     isLoading = false;
 
     return result;

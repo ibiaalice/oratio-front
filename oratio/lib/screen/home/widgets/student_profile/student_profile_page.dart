@@ -4,6 +4,9 @@ import 'package:oratio/config/core/format_data.dart';
 import 'package:oratio/config/entities/accompaniments.dart';
 import 'package:oratio/config/entities/project.dart';
 import 'package:oratio/config/entities/student.dart';
+import 'package:oratio/config/entities/teacher.dart';
+import 'package:oratio/screen/home/widgets/circle_pending_load.dart';
+import 'package:oratio/screen/home/widgets/modals/add_evaluator_modal.dart';
 import 'package:oratio/screen/home/widgets/modals/delete_project_modal.dart';
 import 'package:oratio/screen/home/widgets/modals/insert_accompaniments_modal.dart';
 import 'package:oratio/screen/home/widgets/modals/insert_project_modal.dart';
@@ -42,9 +45,8 @@ class _StudentProfileState extends State<StudentProfile> {
     final screenSize = MediaQuery.of(context).size;
 
     return Observer(builder: (_) {
-      if (store.isLoading) {
-        return const Center(child: CircularProgressIndicator());
-      }
+      if (store.isLoading) return const CirclePendingLoad();
+
       return SingleChildScrollView(
         child: Container(
           color: OratioColors.white,
@@ -157,7 +159,7 @@ class _StudentProfileState extends State<StudentProfile> {
                   onPressed: () {
                     js.context.callMethod('open', [store.project!.link]);
                   },
-                  child: Container(
+                  child: SizedBox(
                     width: 200,
                     child: Text(
                       '${store.project!.link}',
@@ -178,7 +180,36 @@ class _StudentProfileState extends State<StudentProfile> {
                   child: const Text('Editar projeto'),
                 ),
                 TextButton(
-                    onPressed: () {}, child: const Text('Adicionar avaliador')),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AddEvaluatorModal(
+                              teachers: store.teachers,
+                              onAddEvaluator: (Teacher teacher) async {
+                                final result =
+                                    await store.addEvaluator(teacher);
+
+                                if (result.success) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return SuccessMessageAlert(
+                                            message: result.message);
+                                      });
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return ErrorMessageAlert(
+                                            message: result.message);
+                                      });
+                                }
+                              },
+                            );
+                          });
+                    },
+                    child: const Text('Adicionar avaliador')),
                 TextButton(
                   onPressed: () {
                     showDialog(

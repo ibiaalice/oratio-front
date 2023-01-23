@@ -20,7 +20,13 @@ class AddEvaluator {
       finalized: project.finalized,
     );
 
-    return await _repository.editProject(editedProject);
+    final result = await _repository.editProject(editedProject);
+
+    if (result) {
+      return Result(success: true, message: 'Avaliador adicionado com sucesso');
+    } else {
+      return Result(success: false, message: 'Erro ao adicionar avaliador');
+    }
   }
 
   Future<Result> addEvaluator2(Project project, int evaluatorId2) async {
@@ -38,6 +44,13 @@ class AddEvaluator {
       finalized: project.finalized,
     );
 
-    return await _repository.editProject(editedProject);
+    final result = await _repository.editProject(editedProject);
+
+    if (result) {
+      return Result(
+          success: true, message: 'Segundo avaliador adicionado com sucesso');
+    } else {
+      return Result(success: false, message: 'Erro ao adicionar avaliador');
+    }
   }
 }

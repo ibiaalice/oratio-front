@@ -41,6 +41,7 @@ class Project {
 
   Map toJson() {
     return {
+      if (id != null) "id": id,
       "title": title,
       "description": description,
       "link": link,

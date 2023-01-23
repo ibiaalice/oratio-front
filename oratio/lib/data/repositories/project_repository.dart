@@ -15,18 +15,11 @@ class ProjectRepository {
     return response.statusCode == 200;
   }
 
-  Future<Result> editProject(Project editProject) async {
-    final body = editProject.toJson();
-    log('editProject: $body');
-    final response = await dio.post(
-      '$API_URL/project/edit',
-      data: editProject.toJson(),
-    );
+  Future<bool> editProject(Project editProject) async {
+    final response =
+        await dio.post('$API_URL/project/edit', data: editProject.toJson());
 
-    if (response.statusCode == 200) {
-      return Result(success: true, message: 'Project edited successfully');
-    }
-    return Result(success: false, message: 'Error');
+    return response.statusCode == 200;
   }
 
   Future<List> getProjects() async {

@@ -8,9 +8,9 @@ class EditProject {
   EditProject();
 
   Future<Result> call(Project project) async {
-    final response = await _projectRepository.editProject(project);
+    final result = await _projectRepository.editProject(project);
 
-    if (response.success) {
+    if (result) {
       return Result(success: true, message: 'Project edited successfully');
     } else {
       return Result(success: false, message: 'Error');
