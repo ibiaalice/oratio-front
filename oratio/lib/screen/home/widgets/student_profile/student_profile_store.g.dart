@@ -57,6 +57,22 @@ mixin _$StudentProfileStore on _StudentProfileBase, Store {
     });
   }
 
+  late final _$teachersAtom =
+      Atom(name: '_StudentProfileBase.teachers', context: context);
+
+  @override
+  List<Teacher> get teachers {
+    _$teachersAtom.reportRead();
+    return super.teachers;
+  }
+
+  @override
+  set teachers(List<Teacher> value) {
+    _$teachersAtom.reportWrite(value, super.teachers, () {
+      super.teachers = value;
+    });
+  }
+
   late final _$accompanimentsAtom =
       Atom(name: '_StudentProfileBase.accompaniments', context: context);
 
@@ -90,12 +106,63 @@ mixin _$StudentProfileStore on _StudentProfileBase, Store {
         .run(() => super._setAccompaniments());
   }
 
+  late final _$_setTeachersAsyncAction =
+      AsyncAction('_StudentProfileBase._setTeachers', context: context);
+
+  @override
+  Future<void> _setTeachers() {
+    return _$_setTeachersAsyncAction.run(() => super._setTeachers());
+  }
+
+  late final _$deleteAccompanimentsAsyncAction =
+      AsyncAction('_StudentProfileBase.deleteAccompaniments', context: context);
+
+  @override
+  Future<Result> deleteAccompaniments(Accompaniments accompaniments) {
+    return _$deleteAccompanimentsAsyncAction
+        .run(() => super.deleteAccompaniments(accompaniments));
+  }
+
+  late final _$deleteProjectAsyncAction =
+      AsyncAction('_StudentProfileBase.deleteProject', context: context);
+
+  @override
+  Future<Result> deleteProject() {
+    return _$deleteProjectAsyncAction.run(() => super.deleteProject());
+  }
+
+  late final _$addProjectAsyncAction =
+      AsyncAction('_StudentProfileBase.addProject', context: context);
+
+  @override
+  Future<Result> addProject(Project project) {
+    return _$addProjectAsyncAction.run(() => super.addProject(project));
+  }
+
+  late final _$addAccompanimentsAsyncAction =
+      AsyncAction('_StudentProfileBase.addAccompaniments', context: context);
+
+  @override
+  Future<Result> addAccompaniments(Accompaniments accompaniments) {
+    return _$addAccompanimentsAsyncAction
+        .run(() => super.addAccompaniments(accompaniments));
+  }
+
+  late final _$addEvaluatorAsyncAction =
+      AsyncAction('_StudentProfileBase.addEvaluator', context: context);
+
+  @override
+  Future<Result> addEvaluator(Teacher teacher) {
+    return _$addEvaluatorAsyncAction.run(() => super.addEvaluator(teacher));
+  }
+
   @override
   String toString() {
     return '''
 isLoading: ${isLoading},
 student: ${student},
 project: ${project},
+teachers: ${teachers},
 accompaniments: ${accompaniments}
     ''';
   }
