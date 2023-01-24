@@ -1,8 +1,4 @@
 // ignore_for_file: library_private_types_in_public_api
-
-import 'dart:developer';
-
-import 'package:gsheets/gsheets.dart';
 import 'package:mobx/mobx.dart';
 import 'package:oratio/config/entities/project.dart';
 import 'package:oratio/config/entities/result.dart';
@@ -61,6 +57,12 @@ abstract class _CoordinatorSectionStoreBase with Store {
   List<Student> students = [];
 
   @observable
+  String? filterStudent = "";
+
+  @observable
+  String? filterTeacher = "";
+
+  @observable
   List<Project> projects = [];
 
   @observable
@@ -80,10 +82,46 @@ abstract class _CoordinatorSectionStoreBase with Store {
     await _setProjects();
   }
 
+  List<Student> get filteredStudents {
+    if (filterStudent == null || filterStudent!.isEmpty) {
+      return students;
+    }
+
+    return students
+        .where((student) =>
+            student.name.toLowerCase().contains(filterStudent!.toLowerCase()))
+        .toList();
+  }
+
+  List<Teacher> get filteredTeachers {
+    if (filterTeacher == null || filterTeacher!.isEmpty) {
+      return teachers;
+    }
+
+    return teachers
+        .where((teacher) =>
+            teacher.name.toLowerCase().contains(filterTeacher!.toLowerCase()))
+        .toList();
+  }
+
   @action
   void setStudentSelected(Student student) {
     isLoading = true;
     studentSelected = student;
+    isLoading = false;
+  }
+
+  @action
+  void setFilterStudent(String value) {
+    isLoading = true;
+    filterStudent = value;
+    isLoading = false;
+  }
+
+  @action
+  void setFilterTeacher(String value) {
+    isLoading = true;
+    filterTeacher = value;
     isLoading = false;
   }
 

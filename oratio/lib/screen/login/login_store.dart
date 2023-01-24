@@ -8,7 +8,7 @@ class LoginStore = _LoginStoreBase with _$LoginStore;
 abstract class _LoginStoreBase with Store {
   final _preferences = SharedPreferences.getInstance();
   @observable
-  AccountType accountType = AccountType.student;
+  AccountType accountType = AccountType.coordinator;
 
   @action
   void changeAccountType(AccountType type) {

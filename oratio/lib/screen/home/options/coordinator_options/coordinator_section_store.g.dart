@@ -89,6 +89,38 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
     });
   }
 
+  late final _$filterStudentAtom = Atom(
+      name: '_CoordinatorSectionStoreBase.filterStudent', context: context);
+
+  @override
+  String? get filterStudent {
+    _$filterStudentAtom.reportRead();
+    return super.filterStudent;
+  }
+
+  @override
+  set filterStudent(String? value) {
+    _$filterStudentAtom.reportWrite(value, super.filterStudent, () {
+      super.filterStudent = value;
+    });
+  }
+
+  late final _$filterTeacherAtom = Atom(
+      name: '_CoordinatorSectionStoreBase.filterTeacher', context: context);
+
+  @override
+  String? get filterTeacher {
+    _$filterTeacherAtom.reportRead();
+    return super.filterTeacher;
+  }
+
+  @override
+  set filterTeacher(String? value) {
+    _$filterTeacherAtom.reportWrite(value, super.filterTeacher, () {
+      super.filterTeacher = value;
+    });
+  }
+
   late final _$projectsAtom =
       Atom(name: '_CoordinatorSectionStoreBase.projects', context: context);
 
@@ -188,6 +220,28 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
   }
 
   @override
+  void setFilterStudent(String value) {
+    final _$actionInfo = _$_CoordinatorSectionStoreBaseActionController
+        .startAction(name: '_CoordinatorSectionStoreBase.setFilterStudent');
+    try {
+      return super.setFilterStudent(value);
+    } finally {
+      _$_CoordinatorSectionStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setFilterTeacher(String value) {
+    final _$actionInfo = _$_CoordinatorSectionStoreBaseActionController
+        .startAction(name: '_CoordinatorSectionStoreBase.setFilterTeacher');
+    try {
+      return super.setFilterTeacher(value);
+    } finally {
+      _$_CoordinatorSectionStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   Teacher? getTeacher(int? teacherId) {
     final _$actionInfo = _$_CoordinatorSectionStoreBaseActionController
         .startAction(name: '_CoordinatorSectionStoreBase.getTeacher');
@@ -206,6 +260,8 @@ isActiveSemester: ${isActiveSemester},
 studentSelected: ${studentSelected},
 teachers: ${teachers},
 students: ${students},
+filterStudent: ${filterStudent},
+filterTeacher: ${filterTeacher},
 projects: ${projects},
 semesters: ${semesters},
 semesterSelected: ${semesterSelected},

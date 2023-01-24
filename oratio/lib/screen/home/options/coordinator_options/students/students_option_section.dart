@@ -1,27 +1,30 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:oratio/config/entities/teacher.dart';
+import 'package:oratio/config/entities/student.dart';
 import 'package:oratio/screen/home/options/coordinator_options/coordinator_section_store.dart';
 import 'package:oratio/screen/home/widgets/circle_pending_load.dart';
 import 'package:oratio/screen/home/widgets/modals/delete_project_modal.dart';
-import 'package:oratio/screen/home/widgets/modals/insert_teachers_by_sheet_modal.dart';
-import 'package:oratio/screen/home/widgets/modals/insert_teachers_modal.dart';
+import 'package:oratio/screen/home/widgets/modals/insert_students_by_sheet_modal.dart';
+import 'package:oratio/screen/home/widgets/modals/insert_students_modal.dart';
+import 'package:oratio/screen/home/widgets/student_profile/student_profile_page.dart';
 import 'package:oratio/utils/style/oratio_colors.dart';
 import 'package:oratio/utils/style/oratio_icons.dart';
 import 'package:oratio/utils/widgets/error_message_alert.dart';
 import 'package:oratio/utils/widgets/success_message_alert.dart';
 
-class TeachersOptionsSection extends StatefulWidget {
-  const TeachersOptionsSection({Key? key}) : super(key: key);
+class StudentsOptionsSection extends StatefulWidget {
+  const StudentsOptionsSection({Key? key}) : super(key: key);
 
   @override
-  State<TeachersOptionsSection> createState() => _TeachersOptionsSectionState();
+  State<StudentsOptionsSection> createState() => _StudentsOptionsSectionState();
 }
 
-class _TeachersOptionsSectionState extends State<TeachersOptionsSection> {
+class _StudentsOptionsSectionState extends State<StudentsOptionsSection> {
   final CoordinatorSectionStore store = CoordinatorSectionStore();
 
   @override
@@ -34,15 +37,27 @@ class _TeachersOptionsSectionState extends State<TeachersOptionsSection> {
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
       if (store.isLoading) return const CirclePendingLoad();
+
+      if (store.studentSelected != null) {
+        return Container(
+          padding: const EdgeInsets.only(right: 40),
+          child: StudentProfile(
+            student: store.studentSelected!,
+            onBack: () => store.studentSelected = null,
+          ),
+        );
+      }
+
       return Container(
         padding: const EdgeInsets.only(right: 40),
         child: Column(
           children: [
-            _teacherListOptions(),
+            _studentsListOptions(),
             Expanded(
               child: ListView(
                 children: [
-                  for (final teacher in store.teachers) _teacherTile(teacher),
+                  for (final student in store.filteredStudents)
+                    _studentTile(student),
                 ],
               ),
             )
@@ -52,7 +67,7 @@ class _TeachersOptionsSectionState extends State<TeachersOptionsSection> {
     });
   }
 
-  Widget _teacherTile(Teacher teacher) {
+  Widget _studentTile(Student student) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
       child: Card(
@@ -65,10 +80,20 @@ class _TeachersOptionsSectionState extends State<TeachersOptionsSection> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(teacher.name, style: const TextStyle(fontSize: 20)),
+                TextButton(
+                  onPressed: () {
+                    store.setStudentSelected(student);
+                  },
+                  child: Text(
+                    student.name,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ),
                 const SizedBox(height: 10),
-                Text(teacher.email, style: const TextStyle(fontSize: 15)),
+                Text(student.email, style: const TextStyle(fontSize: 15)),
                 const SizedBox(height: 10),
+                Text(student.registrationCourseNumber,
+                    style: const TextStyle(fontSize: 15)),
               ],
             ),
             Row(
@@ -83,11 +108,10 @@ class _TeachersOptionsSectionState extends State<TeachersOptionsSection> {
                         context: context,
                         builder: (context) {
                           return DeleteModal(
-                            title: 'Excluir professor',
-                            message:
-                                'Deseja Excluir o professor ${teacher.name}?',
+                            title: 'Excluir aluno',
+                            message: 'Excluir deletar o aluno ${student.name}?',
                             onDelete: () async {
-                              final result = await store.deleteTeacher(teacher);
+                              final result = await store.deleteStudent(student);
 
                               if (result.success) {
                                 return showDialog(
@@ -121,7 +145,7 @@ class _TeachersOptionsSectionState extends State<TeachersOptionsSection> {
     );
   }
 
-  Widget _teacherListOptions() {
+  Widget _studentsListOptions() {
     return SizedBox(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30),
@@ -130,14 +154,54 @@ class _TeachersOptionsSectionState extends State<TeachersOptionsSection> {
           children: [
             Row(
               children: [
-                _optionButton(
+                if (store.isActiveSemester)
+                  _textButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return InsertStudentsModal(
+                              semesterId: store.semesterSelected!.id!,
+                              onInsert: (Student student) async {
+                                final result = await store.addStudent(student);
+
+                                if (result.success) {
+                                  Navigator.pop(context);
+
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) =>
+                                        const SuccessMessageAlert(
+                                      message: "Aluno adicionado com sucesso",
+                                    ),
+                                  );
+                                } else {
+                                  Navigator.pop(context);
+
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) =>
+                                        const ErrorMessageAlert(
+                                      message: "Aluno não adicionado",
+                                    ),
+                                  );
+                                }
+                              },
+                            );
+                          });
+                    },
+                    iconData: OratioIcons.plusCircle,
+                    text: 'Inserir aluno individualmente',
+                  ),
+                _textButton(
                   onPressed: () {
                     showDialog(
                         context: context,
                         builder: (context) {
-                          return InsertTeachersModal(
-                            onInsert: (Teacher teacher) async {
-                              final result = await store.addTeacher(teacher);
+                          return InsertStudentsBySheetModal(
+                            onInsert: (String spreedsheatsId) async {
+                              final result = await store
+                                  .addStudentBySpreedsheet(spreedsheatsId);
 
                               if (result.success) {
                                 Navigator.pop(context);
@@ -146,7 +210,7 @@ class _TeachersOptionsSectionState extends State<TeachersOptionsSection> {
                                   context: context,
                                   builder: (context) =>
                                       const SuccessMessageAlert(
-                                    message: "Professor adicionado com sucesso",
+                                    message: "Alunos adicionado com sucesso",
                                   ),
                                 );
                               } else {
@@ -155,7 +219,7 @@ class _TeachersOptionsSectionState extends State<TeachersOptionsSection> {
                                 showDialog(
                                   context: context,
                                   builder: (context) => const ErrorMessageAlert(
-                                    message: "Professor não adicionado",
+                                    message: "Alunos não adicionado",
                                   ),
                                 );
                               }
@@ -163,41 +227,35 @@ class _TeachersOptionsSectionState extends State<TeachersOptionsSection> {
                           );
                         });
                   },
-                  iconData: OratioIcons.plusCircle,
-                  text: 'Inserir professor individualmente',
-                ),
-                _optionButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => InsertTeachersBySheetModal(
-                        onInsert: (String sheet) async {
-                          final result =
-                              await store.addTeacherBySpreedsheet(sheet);
-
-                          if (result.success) {
-                          } else {}
-                        },
-                      ),
-                    );
-                  },
                   iconData: OratioIcons.fileAdd,
-                  text: 'Inserir professores por tabela',
+                  text: 'Inserir alunos por tabela',
                 ),
               ],
             ),
-            _optionButton(
-              onPressed: () {},
-              iconData: CupertinoIcons.search,
-              text: 'Procurar professor',
-            ),
+            _searchTextformfield(),
           ],
         ),
       ),
     );
   }
 
-  Widget _optionButton({
+  Widget _searchTextformfield() {
+    return SizedBox(
+      width: 300,
+      child: TextFormField(
+        decoration: const InputDecoration(
+          border: InputBorder.none,
+          hintText: 'Pesquisar aluno',
+          prefixIcon: Icon(CupertinoIcons.search),
+        ),
+        onChanged: (value) {
+          store.setFilterStudent(value);
+        },
+      ),
+    );
+  }
+
+  Widget _textButton({
     required VoidCallback onPressed,
     required IconData iconData,
     required String text,

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:oratio/config/core/enums/home_options.dart';
 import 'package:oratio/screen/home/options/coordinator_options/closed_semester/closed_semester_option_section.dart';
 import 'package:oratio/screen/home/options/coordinator_options/open_semester/open_semester_option_section.dart';
-import 'package:oratio/screen/home/options/coordinator_options/students_option/students_option_section.dart';
-import 'package:oratio/screen/home/options/coordinator_options/teacher_option_section/teachers_option_section.dart';
+import 'package:oratio/screen/home/options/coordinator_options/students/students_option_section.dart';
+import 'package:oratio/screen/home/options/coordinator_options/teachers/teachers_option_section.dart';
 
 class HomeOptionsPage extends StatefulWidget {
   final HomeOptions homeOptions;
