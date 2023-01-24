@@ -12,6 +12,20 @@ class AccompanimentsRepository {
     return response.statusCode == 200;
   }
 
+  Future<bool> delete(Accompaniments accompaniments) async {
+    final response =
+        await dio.delete('$API_URL/accompaniments/${accompaniments.id}');
+
+    return response.statusCode == 200;
+  }
+
+  Future<bool> edit(Accompaniments accompaniments) async {
+    final response = await dio.put('$API_URL/accompaniments/edit',
+        data: accompaniments.toJson());
+
+    return response.statusCode == 200;
+  }
+
   Future<List> getAccompanimentsByStudentId(int studentId) async {
     final response = await dio.get('$API_URL/accompaniments/$studentId');
 
@@ -20,12 +34,5 @@ class AccompanimentsRepository {
       return accompanimentsData;
     }
     return [];
-  }
-
-  Future<bool> delete(Accompaniments accompaniments) async {
-    final response =
-        await dio.delete('$API_URL/accompaniments/${accompaniments.id}');
-
-    return response.statusCode == 200;
   }
 }

@@ -8,7 +8,8 @@ import 'package:oratio/config/entities/project.dart';
 import 'package:oratio/config/entities/student.dart';
 import 'package:oratio/config/entities/teacher.dart';
 import 'package:oratio/screen/home/widgets/circle_pending_load.dart';
-import 'package:oratio/screen/home/widgets/modals/add_evaluator_modal.dart';
+import 'package:oratio/screen/home/widgets/modals/edit_accopaniments_modal.dart';
+import 'package:oratio/screen/home/widgets/modals/insert_evaluator_modal.dart';
 import 'package:oratio/screen/home/widgets/modals/delete_project_modal.dart';
 import 'package:oratio/screen/home/widgets/modals/edit_project_modal.dart';
 import 'package:oratio/screen/home/widgets/modals/insert_accompaniments_modal.dart';
@@ -251,7 +252,7 @@ class _StudentProfileState extends State<StudentProfile> {
                       showDialog(
                           context: context,
                           builder: (context) {
-                            return AddEvaluatorModal(
+                            return InsertEvaluatorModal(
                               teachers: store.teachers,
                               onAddEvaluator: (Teacher teacher) async {
                                 final result =
@@ -418,7 +419,40 @@ class _StudentProfileState extends State<StudentProfile> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return EditAccompanimentsModal(
+                            accompaniments: accompaniments,
+                            student: store.student!,
+                            onEditAccompaniments:
+                                (Accompaniments accompaniments) async {
+                              final result = await store
+                                  .editAccompaniments(accompaniments);
+
+                              if (result.success) {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return SuccessMessageAlert(
+                                        message: result.message,
+                                      );
+                                    });
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return ErrorMessageAlert(
+                                      message: result.message,
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                          );
+                        });
+                  },
                   child: const Text('Editar'),
                 ),
                 TextButton(

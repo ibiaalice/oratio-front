@@ -147,6 +147,15 @@ mixin _$StudentProfileStore on _StudentProfileBase, Store {
     return _$editProjectAsyncAction.run(() => super.editProject(project));
   }
 
+  late final _$editAccompanimentsAsyncAction =
+      AsyncAction('_StudentProfileBase.editAccompaniments', context: context);
+
+  @override
+  Future<Result> editAccompaniments(Accompaniments accompaniments) {
+    return _$editAccompanimentsAsyncAction
+        .run(() => super.editAccompaniments(accompaniments));
+  }
+
   late final _$addAccompanimentsAsyncAction =
       AsyncAction('_StudentProfileBase.addAccompaniments', context: context);
 
