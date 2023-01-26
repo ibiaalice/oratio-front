@@ -81,6 +81,34 @@ mixin _$ProjectsOptionsSectionStore on _ProjectsOptionsSectionStoreBase, Store {
     return _$onInitAsyncAction.run(() => super.onInit());
   }
 
+  late final _$editProjectAsyncAction = AsyncAction(
+      '_ProjectsOptionsSectionStoreBase.editProject',
+      context: context);
+
+  @override
+  Future<Result> editProject(Project project) {
+    return _$editProjectAsyncAction.run(() => super.editProject(project));
+  }
+
+  late final _$addEvaluatorAsyncAction = AsyncAction(
+      '_ProjectsOptionsSectionStoreBase.addEvaluator',
+      context: context);
+
+  @override
+  Future<Result> addEvaluator(Teacher teacher, Project project) {
+    return _$addEvaluatorAsyncAction
+        .run(() => super.addEvaluator(teacher, project));
+  }
+
+  late final _$deleteProjectAsyncAction = AsyncAction(
+      '_ProjectsOptionsSectionStoreBase.deleteProject',
+      context: context);
+
+  @override
+  Future<Result> deleteProject(Project project) {
+    return _$deleteProjectAsyncAction.run(() => super.deleteProject(project));
+  }
+
   @override
   String toString() {
     return '''

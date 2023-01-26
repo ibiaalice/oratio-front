@@ -2,8 +2,12 @@
 
 import 'package:mobx/mobx.dart';
 import 'package:oratio/config/entities/project.dart';
+import 'package:oratio/config/entities/result.dart';
 import 'package:oratio/config/entities/student.dart';
 import 'package:oratio/config/entities/teacher.dart';
+import 'package:oratio/config/usecases/project/add_evaluator.dart';
+import 'package:oratio/config/usecases/project/delete_project.dart';
+import 'package:oratio/config/usecases/project/edit_project.dart';
 import 'package:oratio/config/usecases/project/get_projects.dart';
 import 'package:oratio/config/usecases/student/get_students.dart';
 import 'package:oratio/config/usecases/teacher/get_teachers.dart';
@@ -16,6 +20,10 @@ abstract class _ProjectsOptionsSectionStoreBase with Store {
   final GetProjects _getProjects = GetProjects();
   final GetStudents _getStudents = GetStudents();
   final GetTeachers _getTeachers = GetTeachers();
+
+  final EditProject _editProject = EditProject();
+  final AddEvaluator _addEvaluator = AddEvaluator();
+  final DeleteProject _deleteProject = DeleteProject();
 
   @observable
   bool isLoading = false;
@@ -42,6 +50,37 @@ abstract class _ProjectsOptionsSectionStoreBase with Store {
 
   Student getStudentById(int id) {
     return students.firstWhere((student) => student.id == id);
+  }
+
+  @action
+  Future<Result> editProject(Project project) async {
+    isLoading = true;
+    final result = await _editProject(project);
+    await _setProjects();
+    isLoading = false;
+
+    return result;
+  }
+
+  @action
+  Future<Result> addEvaluator(Teacher teacher, Project project) async {
+    isLoading = true;
+
+    final result = await _addEvaluator(project, teacher.id!);
+    await _setProjects();
+    isLoading = false;
+
+    return result;
+  }
+
+  @action
+  Future<Result> deleteProject(Project project) async {
+    isLoading = true;
+    final result = await _deleteProject(project);
+    await _setProjects();
+    isLoading = false;
+
+    return result;
   }
 
   //Auxiliars methods

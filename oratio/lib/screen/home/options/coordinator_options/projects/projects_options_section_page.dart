@@ -8,12 +8,12 @@ import 'package:oratio/screen/home/options/coordinator_options/projects/projects
 import 'package:oratio/screen/home/widgets/circle_pending_load.dart';
 import 'package:oratio/screen/home/widgets/modals/delete_project_modal.dart';
 import 'package:oratio/screen/home/widgets/modals/edit_project_modal.dart';
-import 'package:oratio/screen/home/widgets/modals/insert_evaluator_modal.dart';
-import 'package:oratio/utils/style/oratio_colors.dart';
 import 'dart:js' as js;
 
 import 'package:oratio/utils/widgets/error_message_alert.dart';
 import 'package:oratio/utils/widgets/success_message_alert.dart';
+
+import 'widgets/insert_evaluator_alert.dart';
 
 class ProjectsOptionsSection extends StatefulWidget {
   const ProjectsOptionsSection({super.key});
@@ -129,23 +129,25 @@ class _ProjectsOptionsSectionState extends State<ProjectsOptionsSection> {
                               teachers: store.teachers,
                               project: project,
                               onEditProject: (Project project) async {
-                                // final result = await store.editProject(project);
+                                final result = await store.editProject(project);
 
-                                // if (result.success) {
-                                //   showDialog(
-                                //       context: context,
-                                //       builder: (context) {
-                                //         return SuccessMessageAlert(
-                                //             message: result.message);
-                                //       });
-                                // } else {
-                                //   showDialog(
-                                //       context: context,
-                                //       builder: (context) {
-                                //         return ErrorMessageAlert(
-                                //             message: result.message);
-                                //       });
-                                // }
+                                if (result.success) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return SuccessMessageAlert(
+                                          message: result.message,
+                                        );
+                                      });
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return ErrorMessageAlert(
+                                          message: result.message,
+                                        );
+                                      });
+                                }
                               },
                             );
                           });
@@ -157,27 +159,29 @@ class _ProjectsOptionsSectionState extends State<ProjectsOptionsSection> {
                         showDialog(
                             context: context,
                             builder: (context) {
-                              return InsertEvaluatorModal(
+                              return InsertEvaluatorAlert(
                                 teachers: store.teachers,
-                                onAddEvaluator: (Teacher teacher) async {
-                                  // final result =
-                                  //     await store.addEvaluator(teacher);
+                                project: project,
+                                onAddEvaluator:
+                                    (Teacher teacher, Project project) async {
+                                  final result = await store.addEvaluator(
+                                      teacher, project);
 
-                                  // if (result.success) {
-                                  //   showDialog(
-                                  //       context: context,
-                                  //       builder: (context) {
-                                  //         return SuccessMessageAlert(
-                                  //             message: result.message);
-                                  //       });
-                                  // } else {
-                                  //   showDialog(
-                                  //       context: context,
-                                  //       builder: (context) {
-                                  //         return ErrorMessageAlert(
-                                  //             message: result.message);
-                                  //       });
-                                  // }
+                                  if (result.success) {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return SuccessMessageAlert(
+                                              message: result.message);
+                                        });
+                                  } else {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return ErrorMessageAlert(
+                                              message: result.message);
+                                        });
+                                  }
                                 },
                               );
                             });
@@ -193,16 +197,16 @@ class _ProjectsOptionsSectionState extends State<ProjectsOptionsSection> {
                         context: context,
                         builder: (context) => DeleteModal(
                           onDelete: () async {
-                            // final result = await store.deleteProject();
-                            // if (result.success) {
-                            //   const SuccessMessageAlert(
-                            //     message: 'Projeto excluído com sucesso!',
-                            //   );
-                            // } else {
-                            //   const ErrorMessageAlert(
-                            //     message: 'Erro ao excluir projeto!',
-                            //   );
-                            // }
+                            final result = await store.deleteProject(project);
+                            if (result.success) {
+                              const SuccessMessageAlert(
+                                message: 'Projeto excluído com sucesso!',
+                              );
+                            } else {
+                              const ErrorMessageAlert(
+                                message: 'Erro ao excluir projeto!',
+                              );
+                            }
                           },
                           title: 'Excluir projeto',
                           message: 'Tem certeza que deseja excluir o projeto?',
