@@ -1,5 +1,8 @@
 // ignore_for_file: avoid_web_libraries_in_flutter
 
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:oratio/config/entities/project.dart';
@@ -41,18 +44,48 @@ class _ProjectsOptionsSectionState extends State<ProjectsOptionsSection> {
 
       return Container(
         padding: const EdgeInsets.only(right: 40),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              for (Project project in store.projects) ...[
-                _projectTile(project),
-                _spacer(),
-              ]
-            ],
-          ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [_searchTextformfield()],
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    for (Project project in store.filteredProjects) ...[
+                      _projectTile(project),
+                      _spacer(),
+                    ]
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       );
     });
+  }
+
+  Widget _searchTextformfield() {
+    return SizedBox(
+      width: 300,
+      child: TextFormField(
+        decoration: const InputDecoration(
+          border: InputBorder.none,
+          hintText: 'Pesquisar aluno',
+          prefixIcon: Icon(CupertinoIcons.search),
+        ),
+        onChanged: (value) {
+          store.onSearch(value);
+        },
+      ),
+    );
   }
 
   Widget _projectTile(Project project) {

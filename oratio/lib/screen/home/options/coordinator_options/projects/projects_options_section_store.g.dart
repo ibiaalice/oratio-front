@@ -25,6 +25,22 @@ mixin _$ProjectsOptionsSectionStore on _ProjectsOptionsSectionStoreBase, Store {
     });
   }
 
+  late final _$searchAtom =
+      Atom(name: '_ProjectsOptionsSectionStoreBase.search', context: context);
+
+  @override
+  String get search {
+    _$searchAtom.reportRead();
+    return super.search;
+  }
+
+  @override
+  set search(String value) {
+    _$searchAtom.reportWrite(value, super.search, () {
+      super.search = value;
+    });
+  }
+
   late final _$projectsAtom =
       Atom(name: '_ProjectsOptionsSectionStoreBase.projects', context: context);
 
@@ -109,10 +125,27 @@ mixin _$ProjectsOptionsSectionStore on _ProjectsOptionsSectionStoreBase, Store {
     return _$deleteProjectAsyncAction.run(() => super.deleteProject(project));
   }
 
+  late final _$_ProjectsOptionsSectionStoreBaseActionController =
+      ActionController(
+          name: '_ProjectsOptionsSectionStoreBase', context: context);
+
+  @override
+  void onSearch(String value) {
+    final _$actionInfo = _$_ProjectsOptionsSectionStoreBaseActionController
+        .startAction(name: '_ProjectsOptionsSectionStoreBase.onSearch');
+    try {
+      return super.onSearch(value);
+    } finally {
+      _$_ProjectsOptionsSectionStoreBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 isLoading: ${isLoading},
+search: ${search},
 projects: ${projects},
 students: ${students},
 teachers: ${teachers}

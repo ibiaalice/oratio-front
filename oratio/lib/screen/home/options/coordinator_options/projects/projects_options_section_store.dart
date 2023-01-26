@@ -29,6 +29,9 @@ abstract class _ProjectsOptionsSectionStoreBase with Store {
   bool isLoading = false;
 
   @observable
+  String search = '';
+
+  @observable
   List<Project> projects = [];
 
   @observable
@@ -42,6 +45,22 @@ abstract class _ProjectsOptionsSectionStoreBase with Store {
     await _setProjects();
     await _setStudents();
     await _setTeachers();
+  }
+
+  @action
+  void onSearch(String value) {
+    isLoading = true;
+    search = value;
+    isLoading = false;
+  }
+
+  List<Project> get filteredProjects {
+    if (search.isEmpty) return projects;
+
+    return projects
+        .where((project) =>
+            project.title.toLowerCase().contains(search.toLowerCase()))
+        .toList();
   }
 
   Teacher getTeacherById(int id) {
