@@ -65,6 +65,13 @@ class _StudentsOptionsSectionState extends State<StudentsOptionsSection> {
     });
   }
 
+  Widget _titleInfo(String info) => Text(
+        info,
+        style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+      );
+
+  Widget _spacer() => const SizedBox(height: 10);
+
   Widget _studentTile(Student student) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
@@ -87,11 +94,22 @@ class _StudentsOptionsSectionState extends State<StudentsOptionsSection> {
                     style: const TextStyle(fontSize: 20),
                   ),
                 ),
-                const SizedBox(height: 10),
-                Text(student.email, style: const TextStyle(fontSize: 15)),
-                const SizedBox(height: 10),
-                Text(student.registrationCourseNumber,
-                    style: const TextStyle(fontSize: 15)),
+                Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _spacer(),
+                      _titleInfo('email:'),
+                      Text(student.email, style: const TextStyle(fontSize: 15)),
+                      _spacer(),
+                      _titleInfo('matrícula:'),
+                      Text(student.registrationCourseNumber,
+                          style: const TextStyle(fontSize: 15)),
+                    ],
+                  ),
+                ),
               ],
             ),
             Row(
