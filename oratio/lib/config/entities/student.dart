@@ -1,13 +1,15 @@
 class Student {
-  final int id;
+  final int? id;
   final String name;
   final String email;
+  final int? semester;
   final String registrationCourseNumber;
 
   Student({
-    required this.id,
+    this.id,
     required this.name,
     required this.email,
+    required this.semester,
     required this.registrationCourseNumber,
   });
 
@@ -16,7 +18,19 @@ class Student {
       id: json['id'],
       name: json['name'],
       email: json['email'],
+      semester: json['semester'],
       registrationCourseNumber: json['registrationCourseNumber'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      if (id != null) 'id': id,
+      'name': name,
+      'email': email,
+      'registrationCourseNumber': registrationCourseNumber,
+      'password': registrationCourseNumber,
+      'semester': semester,
+    };
   }
 }

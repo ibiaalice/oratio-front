@@ -8,7 +8,12 @@ class GetSemesters {
 
   Future<List<Semester>> call() async {
     final result = await repository.getSemesters();
+    final List<Semester> semesters = [];
 
-    return result.map((semester) => Semester.fromJson(semester)).toList();
+
+    for(Map<String, dynamic> semester in result) {
+      semesters.add(Semester.fromJson(semester));
+    }
+    return semesters;
   }
 }

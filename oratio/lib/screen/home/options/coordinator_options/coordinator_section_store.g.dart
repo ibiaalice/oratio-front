@@ -25,6 +25,38 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
     });
   }
 
+  late final _$isActiveSemesterAtom = Atom(
+      name: '_CoordinatorSectionStoreBase.isActiveSemester', context: context);
+
+  @override
+  bool get isActiveSemester {
+    _$isActiveSemesterAtom.reportRead();
+    return super.isActiveSemester;
+  }
+
+  @override
+  set isActiveSemester(bool value) {
+    _$isActiveSemesterAtom.reportWrite(value, super.isActiveSemester, () {
+      super.isActiveSemester = value;
+    });
+  }
+
+  late final _$studentSelectedAtom = Atom(
+      name: '_CoordinatorSectionStoreBase.studentSelected', context: context);
+
+  @override
+  Student? get studentSelected {
+    _$studentSelectedAtom.reportRead();
+    return super.studentSelected;
+  }
+
+  @override
+  set studentSelected(Student? value) {
+    _$studentSelectedAtom.reportWrite(value, super.studentSelected, () {
+      super.studentSelected = value;
+    });
+  }
+
   late final _$teachersAtom =
       Atom(name: '_CoordinatorSectionStoreBase.teachers', context: context);
 
@@ -54,6 +86,38 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
   set students(List<Student> value) {
     _$studentsAtom.reportWrite(value, super.students, () {
       super.students = value;
+    });
+  }
+
+  late final _$filterStudentAtom = Atom(
+      name: '_CoordinatorSectionStoreBase.filterStudent', context: context);
+
+  @override
+  String? get filterStudent {
+    _$filterStudentAtom.reportRead();
+    return super.filterStudent;
+  }
+
+  @override
+  set filterStudent(String? value) {
+    _$filterStudentAtom.reportWrite(value, super.filterStudent, () {
+      super.filterStudent = value;
+    });
+  }
+
+  late final _$filterTeacherAtom = Atom(
+      name: '_CoordinatorSectionStoreBase.filterTeacher', context: context);
+
+  @override
+  String? get filterTeacher {
+    _$filterTeacherAtom.reportRead();
+    return super.filterTeacher;
+  }
+
+  @override
+  set filterTeacher(String? value) {
+    _$filterTeacherAtom.reportWrite(value, super.filterTeacher, () {
+      super.filterTeacher = value;
     });
   }
 
@@ -121,8 +185,69 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
     });
   }
 
+  late final _$editStudentAsyncAction =
+      AsyncAction('_CoordinatorSectionStoreBase.editStudent', context: context);
+
+  @override
+  Future<Result> editStudent(Student student) {
+    return _$editStudentAsyncAction.run(() => super.editStudent(student));
+  }
+
+  late final _$addStudentBySpreedsheetAsyncAction = AsyncAction(
+      '_CoordinatorSectionStoreBase.addStudentBySpreedsheet',
+      context: context);
+
+  @override
+  Future<Result> addStudentBySpreedsheet(String spreadsheet) {
+    return _$addStudentBySpreedsheetAsyncAction
+        .run(() => super.addStudentBySpreedsheet(spreadsheet));
+  }
+
+  late final _$addTeacherBySpreedsheetAsyncAction = AsyncAction(
+      '_CoordinatorSectionStoreBase.addTeacherBySpreedsheet',
+      context: context);
+
+  @override
+  Future<Result> addTeacherBySpreedsheet(String spreadsheet) {
+    return _$addTeacherBySpreedsheetAsyncAction
+        .run(() => super.addTeacherBySpreedsheet(spreadsheet));
+  }
+
   late final _$_CoordinatorSectionStoreBaseActionController =
       ActionController(name: '_CoordinatorSectionStoreBase', context: context);
+
+  @override
+  void setStudentSelected(Student student) {
+    final _$actionInfo = _$_CoordinatorSectionStoreBaseActionController
+        .startAction(name: '_CoordinatorSectionStoreBase.setStudentSelected');
+    try {
+      return super.setStudentSelected(student);
+    } finally {
+      _$_CoordinatorSectionStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setFilterStudent(String value) {
+    final _$actionInfo = _$_CoordinatorSectionStoreBaseActionController
+        .startAction(name: '_CoordinatorSectionStoreBase.setFilterStudent');
+    try {
+      return super.setFilterStudent(value);
+    } finally {
+      _$_CoordinatorSectionStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setFilterTeacher(String value) {
+    final _$actionInfo = _$_CoordinatorSectionStoreBaseActionController
+        .startAction(name: '_CoordinatorSectionStoreBase.setFilterTeacher');
+    try {
+      return super.setFilterTeacher(value);
+    } finally {
+      _$_CoordinatorSectionStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   Teacher? getTeacher(int? teacherId) {
@@ -139,8 +264,12 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
   String toString() {
     return '''
 isLoading: ${isLoading},
+isActiveSemester: ${isActiveSemester},
+studentSelected: ${studentSelected},
 teachers: ${teachers},
 students: ${students},
+filterStudent: ${filterStudent},
+filterTeacher: ${filterTeacher},
 projects: ${projects},
 semesters: ${semesters},
 semesterSelected: ${semesterSelected},

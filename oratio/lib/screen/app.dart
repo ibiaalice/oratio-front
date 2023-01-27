@@ -12,7 +12,7 @@ class App extends StatelessWidget {
     bool isLoading = true;
 
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Oratio',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: "Play",
@@ -22,7 +22,7 @@ class App extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: Routers.primaryRoutes,
-      home: isLoading ? LoginPage() : HomePage(),
+      home: isLoading ? const LoginPage() : HomePage(),
     );
   }
 }

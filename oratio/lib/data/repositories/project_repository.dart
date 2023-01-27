@@ -9,18 +9,17 @@ import '../../config/entities/result.dart';
 class ProjectRepository {
   final Dio dio = Dio();
 
-  Future<Result> editProject(Project editProject) async {
-    final body = editProject.toJson();
-    log('editProject: $body');
-    final response = await dio.post(
-      '$API_URL/project/edit',
-      data: editProject.toJson(),
-    );
+  Future<bool> delete(Project project) async {
+    final response = await dio.delete('$API_URL/project/delete/${project.id}');
 
-    if (response.statusCode == 200) {
-      return Result(success: true, message: 'Project edited successfully');
-    }
-    return Result(success: false, message: 'Error');
+    return response.statusCode == 200;
+  }
+
+  Future<bool> editProject(Project editProject) async {
+    final response =
+        await dio.post('$API_URL/project/edit', data: editProject.toJson());
+
+    return response.statusCode == 200;
   }
 
   Future<List> getProjects() async {
@@ -41,5 +40,18 @@ class ProjectRepository {
       return projectsData;
     }
     return [];
+  }
+
+  Future<Response> getProjectByStudentId(int studentId) async {
+    final response = await dio.get('$API_URL/project/$studentId');
+
+    return response;
+  }
+
+  Future<bool> createProject(Project project) async {
+    final response =
+        await dio.post('$API_URL/project/create', data: project.toJson());
+
+    return (response.statusCode == 200);
   }
 }

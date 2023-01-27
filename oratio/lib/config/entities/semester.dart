@@ -1,5 +1,5 @@
 class Semester {
-  final int id;
+  final int? id;
   final String year;
   final String semester;
   final DateTime start;
@@ -7,7 +7,7 @@ class Semester {
   final String? status;
 
   Semester({
-    required this.id,
+    this.id,
     required this.year,
     required this.semester,
     required this.start,
@@ -41,4 +41,21 @@ class Semester {
       status: status ?? this.status,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        "year": year,
+        "semester": semester,
+        "start": start.toIso8601String(),
+        "end": end?.toIso8601String(),
+        "status": status,
+      };
+
+  Map<String, dynamic> toEditJson() => {
+        "id": id,
+        "year": year,
+        "semester": semester,
+        "start": start.toIso8601String(),
+        "end": end?.toIso8601String(),
+        "status": status,
+      };
 }

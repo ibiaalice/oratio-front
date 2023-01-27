@@ -41,6 +41,22 @@ mixin _$HomeStore on _HomeStoreBase, Store {
     });
   }
 
+  late final _$activeSemesterAtom =
+      Atom(name: '_HomeStoreBase.activeSemester', context: context);
+
+  @override
+  Semester? get activeSemester {
+    _$activeSemesterAtom.reportRead();
+    return super.activeSemester;
+  }
+
+  @override
+  set activeSemester(Semester? value) {
+    _$activeSemesterAtom.reportWrite(value, super.activeSemester, () {
+      super.activeSemester = value;
+    });
+  }
+
   late final _$teachersAtom =
       Atom(name: '_HomeStoreBase.teachers', context: context);
 
@@ -54,6 +70,22 @@ mixin _$HomeStore on _HomeStoreBase, Store {
   set teachers(List<Teacher> value) {
     _$teachersAtom.reportWrite(value, super.teachers, () {
       super.teachers = value;
+    });
+  }
+
+  late final _$semestersAtom =
+      Atom(name: '_HomeStoreBase.semesters', context: context);
+
+  @override
+  List<Semester> get semesters {
+    _$semestersAtom.reportRead();
+    return super.semesters;
+  }
+
+  @override
+  set semesters(List<Semester> value) {
+    _$semestersAtom.reportWrite(value, super.semesters, () {
+      super.semesters = value;
     });
   }
 
@@ -94,7 +126,9 @@ mixin _$HomeStore on _HomeStoreBase, Store {
     return '''
 isLoading: ${isLoading},
 accountType: ${accountType},
+activeSemester: ${activeSemester},
 teachers: ${teachers},
+semesters: ${semesters},
 homeOptions: ${homeOptions}
     ''';
   }

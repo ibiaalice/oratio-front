@@ -4,6 +4,7 @@ import 'package:oratio/utils/style/oratio_icons.dart';
 enum HomeOptions {
   //Coordinator Options
   openSemester,
+  closedSemester,
   teachers,
   students,
   calendar,
@@ -19,6 +20,8 @@ extension HomeOptionsExtensions on HomeOptions {
       //Coordinator Options
       case HomeOptions.openSemester:
         return 'Abrir Semestre';
+      case HomeOptions.closedSemester:
+        return 'Fechar Semestre';
       case HomeOptions.teachers:
         return 'Professores';
       case HomeOptions.students:
@@ -40,6 +43,8 @@ extension HomeOptionsExtensions on HomeOptions {
     switch (this) {
       //Coordinator Options
       case HomeOptions.openSemester:
+        return OratioIcons.book;
+      case HomeOptions.closedSemester:
         return OratioIcons.book;
       case HomeOptions.teachers:
         return OratioIcons.users;

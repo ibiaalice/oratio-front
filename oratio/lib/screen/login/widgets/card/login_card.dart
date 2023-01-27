@@ -4,7 +4,6 @@ import 'package:oratio/screen/login/widgets/card/login_button.dart';
 import 'package:oratio/screen/login/widgets/card/login_image_card.dart';
 import 'package:oratio/screen/login/widgets/card/login_subtitle_card.dart';
 import 'package:oratio/screen/login/widgets/card/login_title_card.dart';
-import 'package:oratio/screen/login/widgets/options/type_radio_list.dart';
 import 'package:oratio/utils/style/oratio_colors.dart';
 import 'package:oratio/utils/widgets/custom_text_form_field.dart';
 
@@ -42,10 +41,6 @@ class LoginCard extends StatelessWidget {
               title: 'Senha',
               isPassword: true,
               onChanged: () {},
-            ),
-            TypeRadioList(
-              activeType: actualAccountType,
-              onChanged: (value) => onAccountTypeChanged(value),
             ),
             LoginButton(
               onPressed: () {

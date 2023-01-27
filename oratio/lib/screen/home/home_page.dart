@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:oratio/config/core/enums/home_options.dart';
-import 'package:oratio/config/entities/semester.dart';
 import 'package:oratio/screen/home/home_store.dart';
 import 'package:oratio/screen/home/options/home_options_page.dart';
 import 'package:oratio/screen/home/widgets/circle_pending_load.dart';
@@ -65,33 +62,10 @@ class _HomePageState extends State<HomePage> {
             children: [
               Observer(builder: (context) {
                 return HomeAside(
+                  isActiveSemester: store.activeSemester != null,
                   accountType: store.accountType,
-                  onTapOpenSemester: () {
-                    log('onTapOpenSemester');
-                    store.setHomeOptions(HomeOptions.openSemester);
-                  },
-                  onTapTeachers: () {
-                    log('onTapTeachers');
-                    store.setHomeOptions(HomeOptions.teachers);
-                  },
-                  onTapStudents: () {
-                    log('onTapStudents');
-                    store.setHomeOptions(HomeOptions.students);
-                  },
-                  onTapCalendar: () {
-                    store.setHomeOptions(HomeOptions.calendar);
-                  },
-                  onTapAttendances: () {
-                    store.setHomeOptions(HomeOptions.attendances);
-                  },
-                  onTapProjects: () {
-                    store.setHomeOptions(HomeOptions.projects);
-                  },
-                  onTapExaminationBoard: () {
-                    store.setHomeOptions(HomeOptions.examinationBoard);
-                  },
-                  onTapResults: () {
-                    store.setHomeOptions(HomeOptions.results);
+                  onTapOption: (HomeOptions option) {
+                    store.setHomeOptions(option);
                   },
                 );
               }),

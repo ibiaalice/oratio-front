@@ -1,33 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:oratio/config/core/enums/account_type.dart';
 import 'package:oratio/config/core/enums/home_options.dart';
-import 'package:oratio/config/entities/semester.dart';
 import 'package:oratio/screen/home/widgets/home_aside/aside_option_button.dart';
 import 'package:oratio/utils/style/oratio_colors.dart';
 
 class HomeAside extends StatefulWidget {
   final AccountType? accountType;
-
-  final Function? onTapOpenSemester;
-  final Function? onTapTeachers;
-  final Function? onTapStudents;
-  final Function? onTapCalendar;
-  final Function? onTapAttendances;
-  final Function? onTapProjects;
-  final Function? onTapExaminationBoard;
-  final Function? onTapResults;
+  final bool isActiveSemester;
+  final Function onTapOption;
 
   const HomeAside({
     Key? key,
     this.accountType,
-    this.onTapOpenSemester,
-    this.onTapTeachers,
-    this.onTapStudents,
-    this.onTapCalendar,
-    this.onTapAttendances,
-    this.onTapProjects,
-    this.onTapExaminationBoard,
-    this.onTapResults,
+    required this.isActiveSemester,
+    required this.onTapOption,
   }) : super(key: key);
 
   @override
@@ -89,44 +75,32 @@ class _HomeAsideState extends State<HomeAside> {
 
   List<Widget> _optionsCoordinator() {
     return [
-      AsideOptionButton(
+      if (!widget.isActiveSemester)
+        AsideOptionButton(
           iconData: HomeOptions.openSemester.icon,
           text: HomeOptions.openSemester.name,
-          onPressed: () => widget.onTapOpenSemester!()),
+          onPressed: () => widget.onTapOption(HomeOptions.openSemester),
+        )
+      else
+        AsideOptionButton(
+          iconData: HomeOptions.closedSemester.icon,
+          text: HomeOptions.closedSemester.name,
+          onPressed: () => widget.onTapOption(HomeOptions.closedSemester),
+        ),
       AsideOptionButton(
         iconData: HomeOptions.teachers.icon,
         text: HomeOptions.teachers.name,
-        onPressed: () => widget.onTapTeachers!(),
+        onPressed: () => widget.onTapOption(HomeOptions.teachers),
       ),
       AsideOptionButton(
         iconData: HomeOptions.students.icon,
         text: HomeOptions.students.name,
-        onPressed: () => widget.onTapStudents!(),
-      ),
-      AsideOptionButton(
-        iconData: HomeOptions.calendar.icon,
-        text: HomeOptions.calendar.name,
-        onPressed: () => widget.onTapCalendar!(),
-      ),
-      AsideOptionButton(
-        iconData: HomeOptions.attendances.icon,
-        text: HomeOptions.attendances.name,
-        onPressed: () => widget.onTapAttendances!(),
+        onPressed: () => widget.onTapOption(HomeOptions.students),
       ),
       AsideOptionButton(
         iconData: HomeOptions.projects.icon,
         text: HomeOptions.projects.name,
-        onPressed: () => widget.onTapProjects!(),
-      ),
-      AsideOptionButton(
-        iconData: HomeOptions.examinationBoard.icon,
-        text: HomeOptions.examinationBoard.name,
-        onPressed: () => widget.onTapExaminationBoard!(),
-      ),
-      AsideOptionButton(
-        iconData: HomeOptions.results.icon,
-        text: HomeOptions.results.name,
-        onPressed: () => widget.onTapResults!(),
+        onPressed: () => widget.onTapOption(HomeOptions.projects),
       ),
     ];
   }

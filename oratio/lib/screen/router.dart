@@ -10,5 +10,6 @@ class Routers {
         '/home': (context) => const HomePage(),
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
+        
       };
 }
