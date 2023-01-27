@@ -40,11 +40,21 @@ abstract class _ProjectsOptionsSectionStoreBase with Store {
   @observable
   List<Teacher> teachers = [];
 
+  @observable
+  Student? selectedStudent;
+
   @action
   Future<void> onInit() async {
     await _setProjects();
     await _setStudents();
     await _setTeachers();
+  }
+
+  @action
+  void setSelectedStudent(Student? student) {
+    isLoading = true;
+    selectedStudent = student;
+    isLoading = false;
   }
 
   @action

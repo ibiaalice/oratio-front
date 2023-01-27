@@ -6,6 +6,7 @@ import 'package:oratio/config/entities/student.dart';
 import 'package:oratio/screen/home/options/coordinator_options/coordinator_section_store.dart';
 import 'package:oratio/screen/home/widgets/circle_pending_load.dart';
 import 'package:oratio/screen/home/widgets/modals/delete_project_modal.dart';
+import 'package:oratio/screen/home/widgets/modals/edit_student_modal.dart';
 import 'package:oratio/screen/home/widgets/modals/insert_students_by_sheet_modal.dart';
 import 'package:oratio/screen/home/widgets/modals/insert_students_modal.dart';
 import 'package:oratio/screen/home/widgets/student_profile/student_profile_page.dart';
@@ -96,7 +97,37 @@ class _StudentsOptionsSectionState extends State<StudentsOptionsSection> {
             Row(
               children: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return EditStudentModal(
+                            student: student,
+                            onEdit: (Student student) async {
+                              final result = await store.editStudent(student);
+
+                              if (result.success) {
+                                Navigator.pop(context);
+
+                                showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      const SuccessMessageAlert(
+                                    message: "Aluno atualizado com sucesso",
+                                  ),
+                                );
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => ErrorMessageAlert(
+                                    message: result.message,
+                                  ),
+                                );
+                              }
+                            },
+                          );
+                        });
+                  },
                   icon: const Icon(OratioIcons.pencil),
                 ),
                 IconButton(

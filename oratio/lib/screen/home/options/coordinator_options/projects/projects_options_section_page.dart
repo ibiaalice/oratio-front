@@ -11,6 +11,7 @@ import 'package:oratio/screen/home/options/coordinator_options/projects/projects
 import 'package:oratio/screen/home/widgets/circle_pending_load.dart';
 import 'package:oratio/screen/home/widgets/modals/delete_project_modal.dart';
 import 'package:oratio/screen/home/widgets/modals/edit_project_modal.dart';
+import 'package:oratio/screen/home/widgets/student_profile/student_profile_page.dart';
 import 'dart:js' as js;
 
 import 'package:oratio/utils/widgets/error_message_alert.dart';
@@ -40,6 +41,14 @@ class _ProjectsOptionsSectionState extends State<ProjectsOptionsSection> {
     return Observer(builder: (context) {
       if (store.isLoading) {
         return const CirclePendingLoad();
+      }
+
+      if (store.selectedStudent != null) {
+        return StudentProfile(
+            student: store.selectedStudent!,
+            onBack: () {
+              store.setSelectedStudent(null);
+            });
       }
 
       return Container(
@@ -104,6 +113,19 @@ class _ProjectsOptionsSectionState extends State<ProjectsOptionsSection> {
                 children: [
                   _titleInfo('Título:'),
                   Text(project.title, style: const TextStyle(fontSize: 16.0)),
+                  _spacer(),
+                  _titleInfo('Aluno:'),
+                  TextButton(
+                    onPressed: () {
+                      store.setSelectedStudent(
+                        store.getStudentById(project.studentId),
+                      );
+                    },
+                    child: Text(
+                      store.getStudentById(project.studentId).name,
+                      style: const TextStyle(fontSize: 16.0),
+                    ),
+                  ),
                   _spacer(),
                   if (project.description != null) ...[
                     _titleInfo('Descrição:'),

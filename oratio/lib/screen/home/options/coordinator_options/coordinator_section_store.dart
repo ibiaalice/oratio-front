@@ -13,6 +13,7 @@ import 'package:oratio/config/usecases/semester/get_semesters.dart';
 import 'package:oratio/config/usecases/semester/init_semester.dart';
 import 'package:oratio/config/usecases/student/add_student.dart';
 import 'package:oratio/config/usecases/student/delete_student.dart';
+import 'package:oratio/config/usecases/student/edit_student.dart';
 import 'package:oratio/config/usecases/student/get_students.dart';
 import 'package:oratio/config/usecases/teacher/create_teacher.dart';
 import 'package:oratio/config/usecases/teacher/delete_teacher.dart';
@@ -32,6 +33,7 @@ abstract class _CoordinatorSectionStoreBase with Store {
   final DeleteStudent _deleteStudent = DeleteStudent();
   final GetSemesters _getSemesters = GetSemesters();
   final GetActiveSemester _getActiveSemester = GetActiveSemester();
+  final EditStudent _editStudent = EditStudent();
 
   final AddTeacher _addTeacher = AddTeacher();
   final DeleteTeacher _deleteTeacher = DeleteTeacher();
@@ -116,6 +118,16 @@ abstract class _CoordinatorSectionStoreBase with Store {
     isLoading = true;
     filterStudent = value;
     isLoading = false;
+  }
+
+  @action
+  Future<Result> editStudent(Student student) async {
+    isLoading = true;
+    final result = await _editStudent(student);
+    await _setStudents();
+    isLoading = false;
+
+    return result;
   }
 
   @action

@@ -89,6 +89,23 @@ mixin _$ProjectsOptionsSectionStore on _ProjectsOptionsSectionStoreBase, Store {
     });
   }
 
+  late final _$selectedStudentAtom = Atom(
+      name: '_ProjectsOptionsSectionStoreBase.selectedStudent',
+      context: context);
+
+  @override
+  Student? get selectedStudent {
+    _$selectedStudentAtom.reportRead();
+    return super.selectedStudent;
+  }
+
+  @override
+  set selectedStudent(Student? value) {
+    _$selectedStudentAtom.reportWrite(value, super.selectedStudent, () {
+      super.selectedStudent = value;
+    });
+  }
+
   late final _$onInitAsyncAction =
       AsyncAction('_ProjectsOptionsSectionStoreBase.onInit', context: context);
 
@@ -130,6 +147,19 @@ mixin _$ProjectsOptionsSectionStore on _ProjectsOptionsSectionStoreBase, Store {
           name: '_ProjectsOptionsSectionStoreBase', context: context);
 
   @override
+  void setSelectedStudent(Student? student) {
+    final _$actionInfo =
+        _$_ProjectsOptionsSectionStoreBaseActionController.startAction(
+            name: '_ProjectsOptionsSectionStoreBase.setSelectedStudent');
+    try {
+      return super.setSelectedStudent(student);
+    } finally {
+      _$_ProjectsOptionsSectionStoreBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void onSearch(String value) {
     final _$actionInfo = _$_ProjectsOptionsSectionStoreBaseActionController
         .startAction(name: '_ProjectsOptionsSectionStoreBase.onSearch');
@@ -148,7 +178,8 @@ isLoading: ${isLoading},
 search: ${search},
 projects: ${projects},
 students: ${students},
-teachers: ${teachers}
+teachers: ${teachers},
+selectedStudent: ${selectedStudent}
     ''';
   }
 }

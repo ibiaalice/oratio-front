@@ -185,6 +185,14 @@ mixin _$CoordinatorSectionStore on _CoordinatorSectionStoreBase, Store {
     });
   }
 
+  late final _$editStudentAsyncAction =
+      AsyncAction('_CoordinatorSectionStoreBase.editStudent', context: context);
+
+  @override
+  Future<Result> editStudent(Student student) {
+    return _$editStudentAsyncAction.run(() => super.editStudent(student));
+  }
+
   late final _$addStudentBySpreedsheetAsyncAction = AsyncAction(
       '_CoordinatorSectionStoreBase.addStudentBySpreedsheet',
       context: context);

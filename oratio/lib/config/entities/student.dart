@@ -25,6 +25,7 @@ class Student {
 
   Map<String, dynamic> toJson() {
     return {
+      if (id != null) 'id': id,
       'name': name,
       'email': email,
       'registrationCourseNumber': registrationCourseNumber,

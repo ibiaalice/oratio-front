@@ -23,6 +23,13 @@ class StudentRepository {
     return response.statusCode == 200;
   }
 
+  Future<bool> editStudent(Student student) async {
+    final response =
+        await dio.put('$API_URL/student/edit', data: student.toJson());
+
+    return response.statusCode == 200;
+  }
+
   Future<bool> delete(Student student) async {
     final response = await dio.delete('$API_URL/student/delete/${student.id}');
 
