@@ -1,10 +1,10 @@
 class User {
-  final String name;
+  final String? name;
   final String email;
   final String password;
 
   User({
-    required this.name,
+    this.name,
     required this.email,
     required this.password,
   });
@@ -19,7 +19,7 @@ class User {
 
   Map<String, dynamic> toJson() {
     return {
-      'name': name,
+      if (name != null) 'name': name,
       'email': email,
       'password': password,
     };

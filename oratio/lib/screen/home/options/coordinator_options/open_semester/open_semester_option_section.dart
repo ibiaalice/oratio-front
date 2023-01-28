@@ -19,7 +19,6 @@ class _OpenSemesterOptionSectionState extends State<OpenSemesterOptionSection> {
 
   @override
   Widget build(BuildContext context) {
-
     return Observer(builder: (context) {
       return SingleChildScrollView(
         child: Column(

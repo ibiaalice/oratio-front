@@ -5,10 +5,16 @@ class ActiveSemesterAlert extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
-      height: 500,
-      width: 500,
-      child: Center(child: Card(child: Text('Semestre em andamento'))),
+    return const Card(
+      child: SizedBox(
+        height: 200,
+        width: 500,
+        child: Center(
+            child: Text(
+          'Semestre em andamento',
+          style: TextStyle(fontSize: 20),
+        )),
+      ),
     );
   }
 }

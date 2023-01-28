@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oratio/config/entities/result.dart';
 import 'package:oratio/config/entities/semester.dart';
+import 'package:oratio/utils/style/oratio_colors.dart';
 import 'package:oratio/utils/widgets/error_message_alert.dart';
 import 'package:oratio/utils/widgets/success_message_alert.dart';
 
@@ -21,12 +22,39 @@ class _OpenSemesterCardState extends State<OpenSemesterCard> {
 
   Semester _mountSemester() {
     return Semester(
-        semester: _semesterController.text,
-        year: _yearController.text,
-        start: initialDate!,
-        end: finalDate,
-        status: 'ACTIVE');
+      semester: _semesterController.text,
+      year: _yearController.text,
+      start: initialDate!,
+      end: finalDate,
+      status: 'ACTIVE',
+    );
   }
+
+  MaterialBanner _redBanner(String message) => MaterialBanner(
+        onVisible: () => Future.delayed(
+          const Duration(seconds: 3),
+          () => ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () =>
+                ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
+            child: const Text(
+              'Fechar',
+              style: TextStyle(
+                color: OratioColors.white,
+              ),
+            ),
+          ),
+        ],
+        content: Text(
+          message,
+          style: const TextStyle(
+            color: OratioColors.white,
+          ),
+        ),
+        backgroundColor: OratioColors.alertRed,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -58,26 +86,38 @@ class _OpenSemesterCardState extends State<OpenSemesterCard> {
                 children: [
                   _nameInfoSemester(),
                   _datesPicker(),
-                  _confirmButton(onPressed: () async {
-                    final semester = _mountSemester();
-                    final Result result = await widget.initSemester(semester);
+                  _confirmButton(
+                    onPressed: () async {
+                      final semester = _mountSemester();
 
-                    if (result.success) {
-                      return showDialog(
-                        context: context,
-                        builder: (context) => const SuccessMessageAlert(
-                          message: "Semestre iniciado com sucesso",
-                        ),
-                      );
-                    } else {
-                      return showDialog(
-                        context: context,
-                        builder: (context) => const ErrorMessageAlert(
-                          message: "Desculpe, ocorreu um erro",
-                        ),
-                      );
-                    }
-                  })
+                      if (semester.year.isEmpty ||
+                          semester.semester.isEmpty ||
+                          semester.end == null) {
+                        ScaffoldMessenger.of(context).showMaterialBanner(
+                          _redBanner('Preencha todos os campos'),
+                        );
+                      } else {
+                        final Result result =
+                            await widget.initSemester(semester);
+
+                        if (result.success) {
+                          return showDialog(
+                            context: context,
+                            builder: (context) => const SuccessMessageAlert(
+                              message: "Semestre iniciado com sucesso",
+                            ),
+                          );
+                        } else {
+                          return showDialog(
+                            context: context,
+                            builder: (context) => const ErrorMessageAlert(
+                              message: "Desculpe, ocorreu um erro",
+                            ),
+                          );
+                        }
+                      }
+                    },
+                  )
                 ],
               ),
             ),

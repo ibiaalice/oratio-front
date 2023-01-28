@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:oratio/screen/login/login_store.dart';
@@ -40,7 +42,19 @@ class _LoginPageState extends State<LoginPage> {
                     actualAccountType: store.accountType,
                     onAccountTypeChanged: (value) =>
                         store.changeAccountType(value),
-                    onTapLogin: () => store.saveAccountType(),
+                    onTapLogin: (String email, String password) async {
+                      final result = await store.login(
+                        email: email,
+                        password: password,
+                      );
+                      if (result) {
+                        Navigator.pushNamed(context, '/home');
+                      } else {
+                        ScaffoldMessenger.of(context).showMaterialBanner(
+                          _redBanner('Email ou senha incorretos'),
+                        );
+                      }
+                    },
                   ),
                   RegisterButton(
                     onPressed: () => Navigator.pushNamed(context, '/register'),
@@ -53,4 +67,30 @@ class _LoginPageState extends State<LoginPage> {
       }),
     );
   }
+
+  MaterialBanner _redBanner(String message) => MaterialBanner(
+        onVisible: () => Future.delayed(
+          const Duration(seconds: 3),
+          () => ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () =>
+                ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
+            child: const Text(
+              'Fechar',
+              style: TextStyle(
+                color: OratioColors.white,
+              ),
+            ),
+          ),
+        ],
+        content: Text(
+          message,
+          style: const TextStyle(
+            color: OratioColors.white,
+          ),
+        ),
+        backgroundColor: OratioColors.alertRed,
+      );
 }

@@ -22,6 +22,8 @@ class LoginCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+    final _emailController = TextEditingController();
+    final _passwordController = TextEditingController();
 
     return Padding(
       padding: const EdgeInsets.only(right: 50, top: 80),
@@ -33,23 +35,98 @@ class LoginCard extends StatelessWidget {
             const LoginImageCard(),
             const LoginTitleCard(),
             const LoginSubtitleCard(),
-            CustomTextFormField(
-              title: 'Matricula',
-              onChanged: () {},
+            _customTextFormField(
+              title: 'E-mail',
+              controller: _emailController,
             ),
-            CustomTextFormField(
+            _customTextFormField(
               title: 'Senha',
               isPassword: true,
-              onChanged: () {},
+              controller: _passwordController,
             ),
             LoginButton(
               onPressed: () {
-                onTapLogin();
-                Navigator.pushNamed(context, '/home');
+                if (_emailController.text.isNotEmpty &&
+                    _passwordController.text.isNotEmpty) {
+                  onTapLogin(_emailController.text, _passwordController.text);
+                } else {
+                  ScaffoldMessenger.of(context).showMaterialBanner(
+                    _redBanner('Preencha todos os campos', context),
+                  );
+                }
               },
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  MaterialBanner _redBanner(String message, context) => MaterialBanner(
+        onVisible: () => Future.delayed(
+          const Duration(seconds: 3),
+          () => ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () =>
+                ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
+            child: const Text(
+              'Fechar',
+              style: TextStyle(
+                color: OratioColors.white,
+              ),
+            ),
+          ),
+        ],
+        content: Text(
+          message,
+          style: const TextStyle(
+            color: OratioColors.white,
+          ),
+        ),
+        backgroundColor: OratioColors.alertRed,
+      );
+
+  Widget _customTextFormField(
+      {required String title,
+      bool isPassword = false,
+      required TextEditingController controller}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            alignment: Alignment.bottomLeft,
+            child: Text(
+              title,
+              style: const TextStyle(
+                color: OratioColors.black,
+                fontSize: 16,
+                fontFamily: 'Play',
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            color: OratioColors.grey,
+            child: Column(
+              children: [
+                TextFormField(
+                  obscureText: isPassword,
+                  controller: controller,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    labelStyle: TextStyle(
+                      color: OratioColors.medium2Grey,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
