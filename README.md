@@ -3,6 +3,8 @@
  Olá, este repositório possui o projeto front-end do Oratio. Mas o que é o **Oratio**? 
  Oratio é o projeto de organização de avaliações de projetos de conclusões de curso para o Curso de Ciência da Computação da Universidade Federal de Campina Grande. Atualmente este projeto está em fase de **MVP** (versão mínima do produto). Sendo apenas um projeto em desenvolvimento. 
  
+## Elementos visuais
+- [Projeto no figma](https://www.figma.com/file/pmNv29Jdq0QTJz0SH3eQ1w/Oratio?node-id=10%3A4)
 ## Como inicializar o projeto? 
 
 Para inicializar o projeto, é necessário algumas especificações. É necessário ter em sua máquina o **flutter 3.3** e o navegador **google chrome** para visualizar o projeto em execução. Com isso, podemos seguir os próximos passos:
